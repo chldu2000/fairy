@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="FairyService" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="top.afool.fairy.boot.FairyApplication" />
+    <module name="fairy.main" />
+    <option name="PROGRAM_PARAMETERS" value="--app=service" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="top.afool.fairy.boot.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

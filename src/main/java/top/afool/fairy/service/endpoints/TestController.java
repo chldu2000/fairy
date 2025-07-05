@@ -1,4 +1,4 @@
-package top.afool.looheir.fairy.endpoints;
+package top.afool.fairy.service.endpoints;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
-    @GetMapping("/test")
+    @GetMapping("/")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("hello world");
+        return ResponseEntity.ok("Hello Fairy-service!");
     }
 }

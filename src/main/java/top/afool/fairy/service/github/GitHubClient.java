@@ -1,4 +1,4 @@
-package top.afool.looheir.fairy.external.github;
+package top.afool.fairy.service.github;
 
 import org.springframework.stereotype.Component;
 
