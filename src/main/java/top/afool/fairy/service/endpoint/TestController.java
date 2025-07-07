@@ -1,4 +1,4 @@
-package top.afool.fairy.service.endpoints;
+package top.afool.fairy.service.endpoint;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
