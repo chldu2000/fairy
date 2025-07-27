@@ -15,5 +15,4 @@ public class PullRequest {
     private String description;
     private String author;
     private String authorEmail;
-    private VCSType vcsType;
 }
