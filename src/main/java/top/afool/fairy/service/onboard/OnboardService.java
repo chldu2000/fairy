@@ -1,4 +1,4 @@
-package top.afool.fairy.service.service;
+package top.afool.fairy.service.onboard;
 
 import org.springframework.stereotype.Service;
 import top.afool.fairy.common.entity.FairyProject;

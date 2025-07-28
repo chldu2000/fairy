@@ -1,4 +1,4 @@
-package top.afool.fairy.service.service;
+package top.afool.fairy.service.intelligence;
 
 import org.springframework.stereotype.Service;
 
