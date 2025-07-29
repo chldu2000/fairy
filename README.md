@@ -12,7 +12,7 @@ Improve your PR review experience.
 - Common：通用类
 - External：集成外部服务
 
-原本应该是几个分开的 repo，但是为了自己写的时候少切项目，干脆放在一起。
+原本应该是几个分开的 repo，但是为了自己写的时候少切项目，干脆放在一起。（之后可能改成子项目的形式吧，那样管理 property 会方便点？）
 
 ~~还应该有 Proxy 等模块，但是我自己的 demo 应该不会涉及像多个 VCS instance 这样的需求，所以只大概分了上面几个模块。~~
 
@@ -23,6 +23,7 @@ sequenceDiagram
     participant Listener
     participant Enrichment
     participant Processor
+    %% Integrated with external services
     participant Client
     Listener->>Enrichment: New PR version
     loop Retry Enrich
