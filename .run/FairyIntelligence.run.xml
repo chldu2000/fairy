@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="FairyIntelligence" type="Application" factoryName="Application">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/.env" />
+    </option>
     <option name="MAIN_CLASS_NAME" value="top.afool.fairy.boot.FairyApplication" />
     <module name="fairy.main" />
     <option name="PROGRAM_PARAMETERS" value="--app=ai" />
