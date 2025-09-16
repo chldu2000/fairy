@@ -1,5 +1,7 @@
 Test: raise a PR
 
+Test: fairy get PR
+
 # Fairy
 
 Improve your PR review experience.
