@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConditionalOnExpression("'${app}'.equals('service')")
-@ComponentScan("top.afool.fairy.service")
+@ComponentScan(basePackages = {"top.afool.fairy.service", "top.afool.fairy.common"})
 public class ServiceAppConfig {
 }

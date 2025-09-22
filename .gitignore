@@ -31,3 +31,6 @@ replay_pid*
 
 # build files
 build/
+
+# Environment file
+.env
