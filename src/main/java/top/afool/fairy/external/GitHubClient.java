@@ -18,9 +18,9 @@ public class GitHubClient implements VCSClient {
 
     private FairyPR toFairyPR(JSONObject githubPR) {
 
-        return FairyPR.builder()
+        var pr = FairyPR.builder()
                 .url(githubPR.getStr("html_url"))
-//                .project("")
+                .project(githubPR.getByPath("base.repo.owner.login", String.class))
                 .fromRepo(githubPR.getByPath("head.repo.name", String.class))
                 .toRepo(githubPR.getByPath("base.repo.name", String.class))
                 .prNumber(githubPR.getInt("number"))
@@ -33,6 +33,8 @@ public class GitHubClient implements VCSClient {
 //                .authorEmail(githubPR.getStr("user", "email"))
                 .vcsType(VCSType.GITHUB)
                 .build();
+        pr.setPrID(pr.getVcsType().name() + "/" + pr.getProject() + "/" + pr.getToRepo() + "/" + pr.getPrNumber() + "/" + pr.getVersion());
+        return pr;
     }
 
     // list PRs under user/org: search api?
