@@ -1,23 +1,28 @@
 package top.afool.fairy.listener;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import top.afool.fairy.common.entity.FairyPR;
 import top.afool.fairy.common.entity.VCSType;
+import top.afool.fairy.common.service.FairyDataManager;
 import top.afool.fairy.external.GitHubClient;
 import top.afool.fairy.external.VCSClient;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
 public class PullRequestHandler {
-    private final HashMap<VCSType, VCSClient> vcsClientMap = new HashMap<>();
+    private final Map<VCSType, VCSClient> vcsClientMap = Map.of(VCSType.GITHUB, new GitHubClient()); //new HashMap<>();
 
-    public PullRequestHandler() {
-        vcsClientMap.put(VCSType.GITHUB, new GitHubClient());
-    }
+    @Autowired
+    FairyDataManager dataManager;
+
+//    public PullRequestHandler() {
+//        vcsClientMap.put(VCSType.GITHUB, new GitHubClient());
+//    }
 
     public ResponseEntity<String> handlePullRequest(VCSType vcsType) {
         var vcsClient = vcsClientMap.get(vcsType);
@@ -32,6 +37,10 @@ public class PullRequestHandler {
         if (vcsClient == null) {
             return ResponseEntity.badRequest().body(null);
         }
-        return ResponseEntity.ok(vcsClient.listPRs().collectList().block());
+
+        var pullRequests = vcsClient.listPRs().collectList().block();
+        dataManager.saveFairyPRs(pullRequests);
+
+        return ResponseEntity.ok(pullRequests);
     }
 }

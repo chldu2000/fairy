@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConditionalOnExpression("'${app}'.equals('listener')")
-@ComponentScan("top.afool.fairy.listener")
+@ComponentScan(basePackages = {"top.afool.fairy.listener", "top.afool.fairy.common"})
 public class ListenerAppConfig {
 }

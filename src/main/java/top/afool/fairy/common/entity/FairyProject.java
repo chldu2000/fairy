@@ -21,7 +21,7 @@ public class FairyProject extends Project {
 
     public static FairyProject giveMeAProjectForTest() {
         FairyProject project = new FairyProject();
-        project.setUrl("https://github.com/LooHeir/fairy");
+        project.setUrl("https://github.com/chldu2000/fairy");
         project.setProjectName("fairy");
         project.setFairyEnabled(true);
         project.setIntelligenceEnabled(true);

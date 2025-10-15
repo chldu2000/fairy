@@ -38,7 +38,7 @@ public class GitHubClient implements VCSClient {
     // list PRs under user/org: search api?
     @Override
     public Flux<FairyPR> listPRs() {
-        var url = "https://api.github.com/repos/LooHeir/fairy/pulls";
+        var url = "https://api.github.com/repos/chldu2000/fairy/pulls";
 
         var headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + System.getenv("GITHUB_TOKEN"));
@@ -55,7 +55,7 @@ public class GitHubClient implements VCSClient {
 
     @Override
     public Mono<FairyPR> getPR(Integer prId) {
-        var url = "https://api.github.com/repos/LooHeir/fairy/pulls/" + prId;
+        var url = "https://api.github.com/repos/chldu2000/fairy/pulls/" + prId;
 
         // add headers
 
