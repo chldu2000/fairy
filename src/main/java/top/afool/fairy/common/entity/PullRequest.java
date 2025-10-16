@@ -1,10 +1,12 @@
 package top.afool.fairy.common.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
 public class PullRequest {
     private String url;
     private String project;

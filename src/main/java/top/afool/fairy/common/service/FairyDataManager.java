@@ -20,7 +20,15 @@ public class FairyDataManager {
         return false;
     }
 
-    public void saveFairyPRs(List<FairyPR> fairyPRs) {
-        fairyPRRepo.saveAll(fairyPRs);
+    public FairyPR getFairyPR(String prId) {
+        return fairyPRRepo.findById(prId).orElse(null);
+    }
+
+    public FairyPR saveFairyPR(FairyPR fairyPR) {
+        return fairyPRRepo.save(fairyPR);
+    }
+
+    public List<FairyPR> saveFairyPRs(List<FairyPR> fairyPRs) {
+        return fairyPRRepo.saveAll(fairyPRs);
     }
 }

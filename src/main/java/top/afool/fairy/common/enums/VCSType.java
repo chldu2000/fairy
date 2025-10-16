@@ -1,7 +1,7 @@
-package top.afool.fairy.common.entity;
+package top.afool.fairy.common.enums;
 
 public enum VCSType {
     GITHUB,
     BITBUCKET,
-    GITLAB;
+    GITLAB,
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.afool.fairy.common.entity.FairyPR;
-import top.afool.fairy.common.entity.VCSType;
+import top.afool.fairy.common.enums.VCSType;
 
 import java.util.List;
 
