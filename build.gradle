@@ -46,6 +46,7 @@ tasks.register('listenerBootJar', BootJar) {
     archiveClassifier = 'listener'
     mainClass = 'top.afool.fairy.listener.FairyListenerApplication'
     from sourceSets.main.output
+    targetJavaVersion = JavaVersion.VERSION_21
 }
 
 tasks.register('serviceBootJar', BootJar) {
@@ -53,6 +54,7 @@ tasks.register('serviceBootJar', BootJar) {
     archiveClassifier = 'service'
     mainClass = 'top.afool.fairy.service.FairyServiceApplication'
     from sourceSets.main.output
+    targetJavaVersion = JavaVersion.VERSION_21
 }
 
 tasks.named('test') {
