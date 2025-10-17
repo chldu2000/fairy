@@ -2,7 +2,7 @@ package top.afool.fairy.common.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.afool.fairy.common.entity.FairyPR;
+import top.afool.fairy.common.entity.PullRequest;
 import top.afool.fairy.common.repository.FairyPRRepo;
 
 import java.util.List;
@@ -20,15 +20,15 @@ public class FairyDataManager {
         return false;
     }
 
-    public FairyPR getFairyPR(String prId) {
+    public PullRequest getFairyPR(String prId) {
         return fairyPRRepo.findById(prId).orElse(null);
     }
 
-    public FairyPR saveFairyPR(FairyPR fairyPR) {
+    public PullRequest saveFairyPR(PullRequest fairyPR) {
         return fairyPRRepo.save(fairyPR);
     }
 
-    public List<FairyPR> saveFairyPRs(List<FairyPR> fairyPRs) {
+    public List<PullRequest> saveFairyPRs(List<PullRequest> fairyPRs) {
         return fairyPRRepo.saveAll(fairyPRs);
     }
 }

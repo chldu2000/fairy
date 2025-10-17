@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import top.afool.fairy.common.entity.FairyPR;
+import top.afool.fairy.common.entity.PullRequest;
 import top.afool.fairy.common.enums.VCSType;
 
 @Slf4j
@@ -16,9 +16,9 @@ public class GitHubClient implements VCSClient {
 
     WebClient webClient = WebClient.builder().build();
 
-    private FairyPR toFairyPR(JSONObject githubPR) {
+    private PullRequest toFairyPR(JSONObject githubPR) {
 
-        var pr = FairyPR.builder()
+        var pr = PullRequest.builder()
                 .url(githubPR.getStr("html_url"))
                 .project(githubPR.getByPath("base.repo.owner.login", String.class))
                 .fromRepo(githubPR.getByPath("head.repo.name", String.class))
@@ -39,7 +39,7 @@ public class GitHubClient implements VCSClient {
 
     // list PRs under user/org: search api?
     @Override
-    public Flux<FairyPR> listPRs() {
+    public Flux<PullRequest> listPRs() {
         var url = "https://api.github.com/repos/chldu2000/fairy/pulls";
 
         var headers = new HttpHeaders();
@@ -56,7 +56,7 @@ public class GitHubClient implements VCSClient {
     }
 
     @Override
-    public Mono<FairyPR> getPR(Integer prId) {
+    public Mono<PullRequest> getPR(Integer prId) {
         var url = "https://api.github.com/repos/chldu2000/fairy/pulls/" + prId;
 
         // add headers

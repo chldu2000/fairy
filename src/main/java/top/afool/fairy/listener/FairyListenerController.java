@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.afool.fairy.common.entity.FairyPR;
+import top.afool.fairy.common.entity.PullRequest;
 import top.afool.fairy.common.enums.VCSType;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class FairyListenerController {
     }
 
     @GetMapping("/pull-requests/github/latest")
-    public ResponseEntity<List<FairyPR>> getGitHubLatestPullRequest() {
+    public ResponseEntity<List<PullRequest>> getGitHubLatestPullRequest() {
         return pullRequestHandler.getPullRequests(VCSType.GITHUB);
     }
 

@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import top.afool.fairy.common.entity.FairyProject;
-import top.afool.fairy.common.entity.FairyRepo;
+import top.afool.fairy.common.entity.Project;
+import top.afool.fairy.common.entity.Pipeline;
 
 import java.util.List;
 
@@ -14,22 +14,22 @@ import java.util.List;
 @RequestMapping("/explore")
 public class ExploreController {
     @GetMapping("/project")
-    public ResponseEntity<List<FairyProject>> getAllProjects(@RequestParam(required = false) Boolean includeInactive) {
-        return ResponseEntity.ok(List.of(FairyProject.giveMeAProjectForTest()));
+    public ResponseEntity<List<Project>> getAllProjects(@RequestParam(required = false) Boolean includeInactive) {
+        return ResponseEntity.ok(List.of(Project.giveMeAProjectForTest()));
     }
 
     @GetMapping("/project/{projectName}")
-    public ResponseEntity<FairyProject> getProjectByName(String projectName) {
-        return ResponseEntity.ok(new FairyProject());
+    public ResponseEntity<Project> getProjectByName(String projectName) {
+        return ResponseEntity.ok(new Project());
     }
 
     @GetMapping("/repository")
-    public ResponseEntity<List<FairyRepo>> getAllRepositories() {
-        return ResponseEntity.ok(List.of(new FairyRepo()));
+    public ResponseEntity<List<Pipeline>> getAllRepositories() {
+        return ResponseEntity.ok(List.of(new Pipeline()));
     }
 
     @GetMapping("/repository/{repositoryName}")
-    public ResponseEntity<List<FairyRepo>> getRepositoryByName(String repositoryName) {
-        return ResponseEntity.ok(List.of(new FairyRepo()));
+    public ResponseEntity<List<Pipeline>> getRepositoryByName(String repositoryName) {
+        return ResponseEntity.ok(List.of(new Pipeline()));
     }
 }

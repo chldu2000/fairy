@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import top.afool.fairy.common.entity.FairyPR;
+import top.afool.fairy.common.entity.PullRequest;
 import top.afool.fairy.common.entity.FairyTask;
 import top.afool.fairy.common.enums.FairyTaskStatus;
 import top.afool.fairy.common.enums.FairyTaskType;
@@ -41,7 +41,7 @@ public class PullRequestHandler {
         return ResponseEntity.ok(Objects.requireNonNull(vcsClient.listPRs().blockFirst()).toString());
     }
 
-    public ResponseEntity<List<FairyPR>> getPullRequests(VCSType vcsType) {
+    public ResponseEntity<List<PullRequest>> getPullRequests(VCSType vcsType) {
         var vcsClient = vcsClientMap.get(vcsType);
         if (vcsClient == null) {
             return ResponseEntity.badRequest().body(null);
@@ -55,7 +55,7 @@ public class PullRequestHandler {
         return ResponseEntity.ok(pullRequests);
     }
 
-    private void createReviewTask(FairyPR pullRequest) {
+    private void createReviewTask(PullRequest pullRequest) {
         try {
             taskProducer.send(FairyTask.builder()
                     .taskID(pullRequest.getPrID())
