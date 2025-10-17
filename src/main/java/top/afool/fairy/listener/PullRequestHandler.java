@@ -59,7 +59,7 @@ public class PullRequestHandler {
         try {
             taskProducer.send(FairyTask.builder()
                     .taskID(pullRequest.getPrID())
-                    .type(FairyTaskType.PR_REVIEW)
+                    .type(FairyTaskType.REVIEW_BASIC)
                     .status(FairyTaskStatus.CREATED)
                     .message("Pull request created")
                     .build());

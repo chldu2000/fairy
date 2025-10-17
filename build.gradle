@@ -1,42 +1,58 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.3'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id("java")
+    id("org.springframework.boot") version "3.5.3"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = 'top.afool'
-version = '0.0.1-SNAPSHOT'
+group = "top.afool"
+version = "0.0.1-SNAPSHOT"
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom(annotationProcessor)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
-    implementation 'org.springframework.kafka:spring-kafka'
+    implementation("org.springframework.kafka:spring-kafka")
 
-    implementation 'cn.hutool:hutool-all:5.8.40'
+    implementation("cn.hutool:hutool-all:5.8.40")
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.register('listenerBootJar', BootJar) {
+    dependsOn compileJava
+    archiveClassifier = 'listener'
+    mainClass = 'top.afool.fairy.listener.FairyListenerApplication'
+    from sourceSets.main.output
+}
+
+tasks.register('serviceBootJar', BootJar) {
+    dependsOn compileJava
+    archiveClassifier = 'service'
+    mainClass = 'top.afool.fairy.service.FairyServiceApplication'
+    from sourceSets.main.output
 }
 
 tasks.named('test') {

@@ -3,9 +3,8 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/.env" />
     </option>
-    <option name="MAIN_CLASS_NAME" value="top.afool.fairy.boot.FairyApplication" />
+    <option name="MAIN_CLASS_NAME" value="top.afool.fairy.listener.FairyListenerApplication" />
     <module name="fairy.main" />
-    <option name="PROGRAM_PARAMETERS" value="--app=listener" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="top.afool.fairy.boot.*" />
