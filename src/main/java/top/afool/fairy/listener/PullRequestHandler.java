@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import top.afool.fairy.common.Variables;
 import top.afool.fairy.common.entity.PullRequest;
 import top.afool.fairy.common.entity.FairyTask;
 import top.afool.fairy.common.enums.FairyTaskStatus;
@@ -57,7 +58,8 @@ public class PullRequestHandler {
 
     private void createReviewTask(PullRequest pullRequest) {
         try {
-            taskProducer.send(FairyTask.builder()
+            taskProducer.send(Variables.getTopicTaskBasic(),
+                    FairyTask.builder()
                     .taskID(pullRequest.getPrID())
                     .type(FairyTaskType.REVIEW_BASIC)
                     .status(FairyTaskStatus.CREATED)
