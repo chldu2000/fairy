@@ -1,6 +1,14 @@
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
-export const chatList = [
+export type Chat = {
+  id: number;
+  name: string;
+  message: string;
+  time: string;
+  unread: boolean;
+};
+
+export const chatList = writable<Chat[]>([
   {
     id: 1,
     name: 'Jane',
@@ -15,6 +23,24 @@ export const chatList = [
     time: '10:05 AM',
     unread: false,
   },
-]
+]);
 
 export const selectedChatId = writable<number | null>(1);
+
+export function createChat(name: string) : number {
+  const newId = get(chatList).length + 1;
+  chatList.update(chats => [
+    ...chats,
+    {
+      id: newId,
+      name,
+      message: '',
+      time: new Date().toLocaleTimeString(),
+      unread: true,
+    }
+  ]);
+
+  selectedChatId.set(newId);
+
+  return newId;
+}

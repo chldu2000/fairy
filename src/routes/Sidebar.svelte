@@ -1,16 +1,17 @@
 <script lang="ts">
-    import { chatList, selectedChatId } from "$lib/mocked-data";
+    import { chatList, selectedChatId, createChat } from "$lib/mocked-data";
     import { goto } from "$app/navigation";
 
-    function onclick(target: number) {
+    function jumpTo(target: number) {
         if (target === -1) {
             // window.location.href = resolve('/settings');
             selectedChatId.set(null);
             goto('/settings');
         } else if (target >= 0) {
             // selectedChatId.set(target);
+            const newChat = createChat("New Chat");
             console.log("Selected chat:", $selectedChatId);
-            goto(`/chat/${target}`);
+            goto(`/chat/${newChat}`);
         } else {
             console.error("Invalid target for onclick:", target);
         }
@@ -18,23 +19,29 @@
 </script>
 
 <div class="sidebar">
-    <button onclick={ () => onclick(0) }>
+    <button onclick={ () => jumpTo(0) }>
         New Chat
     </button>
     <div class="chat-list">
-        {#each chatList as chat}
+        {#each $chatList as chat}
             <a href={`/chat/${chat.id}`} class="chat-item {$selectedChatId === chat.id ? 'selected' : ''}">
                 {chat.name}
             </a>
         {/each}
     </div>
-    <button onclick={ () => onclick(-1) }>Settings</button>
+    
+    <div class="button-group-h-centered">
+        <button class="round">+</button>
+        <button class="round" onclick={ () => jumpTo(-1) }>⚙</button>
+    </div>
+    
 </div>
 
 <style>
     .sidebar {
         background-color: #2f2f2f;
         width: 20rem;
+        height: 100vh;
         display: flex;
         flex-direction: column;
     }
@@ -51,10 +58,11 @@
         color: white;
 
         /* width: 15rem; */
-        height: 2rem;
+        min-height: 2rem;
         border-radius: 1rem;
         padding: 0 1rem;
         margin: 0.5rem;
+        flex-shrink: 0;;
 
         text-decoration: none;
         text-align: left;
@@ -64,10 +72,16 @@
         text-overflow: ellipsis;
     }
 
-    .chat-item.selected {
+    .chat-item.selected, .chat-item:hover {
         background-color: yellow;
         color: black;
         /* border: yellow 0.25rem solid; */
+    }
+
+    .button-group-h-centered {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
     }
 
     button {
@@ -81,8 +95,13 @@
         margin: 0.5rem;
     }
 
+    button.round {
+        width: 2.5rem;
+        padding: 0 0 ;
+    }
+
     button:hover {
-        animation: breath-scale 0.5s infinite alternate;
+        animation: breath-scale 1s infinite alternate;
         color: black;
     }
 
@@ -91,15 +110,18 @@
     }
 
     @keyframes breath-scale {
-        from {
+        0% {
             background-color: yellow;
             border: yellow 0.25rem solid;
             transform: scale(1);
         }
-        to {
+        50% {
+            transform: scale(1.02);
+        }
+        100% {
             background-color: #9bbe00;
             border: #9bbe00 0.25rem solid;
-            transform: scale(1.05);
+            transform: scale(1);
         }
     }
 </style>
