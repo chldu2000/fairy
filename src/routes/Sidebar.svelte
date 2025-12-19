@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { chatList, selectedChatId, createChat } from "$lib/mocked-data";
+    import { chatList, selectedChatId, createChat, deleteChat } from "$lib/mocked-data";
     import { goto } from "$app/navigation";
+    import { scale } from "svelte/transition";
 
     function jumpTo(target: number) {
         if (target === -1) {
@@ -16,6 +17,18 @@
             console.error("Invalid target for onclick:", target);
         }
     }
+
+    function handleDeleteChat(event: Event, id: number) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        console.log("Deleting chat:", id);
+        deleteChat(id);
+        if ($selectedChatId === id) {
+            selectedChatId.set(null);
+            goto('/');
+        }
+    }
 </script>
 
 <div class="sidebar">
@@ -23,9 +36,10 @@
         New Chat
     </button>
     <div class="chat-list">
-        {#each $chatList as chat}
-            <a href={`/chat/${chat.id}`} class="chat-item {$selectedChatId === chat.id ? 'selected' : ''}">
+        {#each [...$chatList].reverse() as chat (chat.id)}
+            <a href={`/chat/${chat.id}`} class="chat-item {$selectedChatId === chat.id ? 'selected' : ''}" transition:scale>
                 {chat.name}
+                <button class='icon-button' onclick={ (e) => handleDeleteChat(e, chat.id) }>✕</button>
             </a>
         {/each}
     </div>
@@ -70,18 +84,43 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    .chat-item.selected, .chat-item:hover {
+    .chat-item.selected,
+    .chat-item:hover {
         background-color: yellow;
         color: black;
         /* border: yellow 0.25rem solid; */
+    }
+
+    .chat-item.selected .icon-button,
+    .chat-item:hover .icon-button {
+        display: flex; /* show icon buttons if parent is selected */
     }
 
     .button-group-h-centered {
         display: flex;
         flex-direction: row;
         justify-content: center;
+    }
+
+    .icon-button {
+        background: transparent;
+        border: none;
+        color: inherit;
+        font-size: 1.5rem;
+        cursor: pointer;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: none; /* hide by default */
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
     }
 
     button {
