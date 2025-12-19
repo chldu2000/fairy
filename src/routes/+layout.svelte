@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Header from './Header.svelte';
 	// import './layout.css';
-    import ModelSwitch from './ModelSwitch.svelte';
     import Sidebar from './Sidebar.svelte';
 
 	let { children } = $props();
@@ -12,12 +11,9 @@
 
 	<Sidebar />
 
-	<div class="chat-container">
-		<ModelSwitch />
-		<main>
-			{@render children()}
-		</main>
-	</div>
+	<main>
+		{@render children()}
+	</main>
 
 	
 
@@ -38,24 +34,15 @@
 	.app {
 		display: flex;
 		flex-direction: row;
-		min-height: 100vh;
-	}
-
-	.chat-container {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
+		width: 100vw;
+		height: 100vh;
 	}
 
 	main {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		padding: 1rem;
 		width: 100%;
-		max-width: 64rem;
-		margin: 0 auto;
-		box-sizing: border-box;
 	}
 
 	footer {

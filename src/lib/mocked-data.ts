@@ -1,3 +1,5 @@
+import { writable } from 'svelte/store';
+
 export const chatList = [
   {
     id: 1,
@@ -14,3 +16,5 @@ export const chatList = [
     unread: false,
   },
 ]
+
+export const selectedChatId = writable<number | null>(1);
