@@ -1,0 +1,82 @@
+.kk-button {
+    background-color: black;
+    color: white;
+    height: 2.5rem;
+    border-radius: 1.25rem;
+    border: grey 0.25rem solid;
+    padding: 0 1rem;
+    margin: 0.5rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.kk-button:hover {
+    animation: breath-scale 1s infinite alternate;
+    color: black;
+}
+
+.kk-button:active {
+    color: white;
+}
+
+.kk-button:focus {
+    outline: 2px solid #9bbe00;
+    outline-offset: 2px;
+}
+
+.kk-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    animation: none;
+    background-color: grey;
+    color: white;
+    border-color: grey;
+}
+
+.kk-button.round {
+	width: 2.5rem;
+	padding: 0;
+}
+
+.kk-button.plain {
+	background: transparent;
+	border: none;
+	color: inherit;
+	font-size: 1.5rem;
+	cursor: pointer;
+	width: 1.5rem;
+	height: 1.5rem;
+	/* display: none; */
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	margin: 0;
+}
+
+.kk-button.plain:hover {
+    animation: none;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+@keyframes breath-scale {
+    0% {
+        background-color: yellow;
+        border: yellow 0.25rem solid;
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        background-color: #9bbe00;
+        border: #9bbe00 0.25rem solid;
+        transform: scale(1);
+    }
+}

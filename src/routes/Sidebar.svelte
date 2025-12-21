@@ -2,6 +2,7 @@
     import { chatHistory, selectedChat, selectChat, createChat, deleteChat } from "$lib/mocked-data.svelte";
     import { goto } from "$app/navigation";
     import { scale } from "svelte/transition";
+    import KKButton from "$lib/widgets/KKButton.svelte";
 
     function jumpTo(target: number) {
         if (target === -1) {
@@ -32,23 +33,23 @@
 </script>
 
 <div class="sidebar">
-    <button onclick={ () => jumpTo(0) }>
+    <KKButton onclick={ () => jumpTo(0) }>
         New Chat
-    </button>
+    </KKButton>
     <div class="chat-list">
         {#each [...chatHistory.sessions].reverse() as chat (chat.id)}
             <a href={`/chat/${chat.id}`} class="chat-item {selectedChat.id === chat.id ? "selected" : ""}" transition:scale>
                 <span class="chat-name">{chat.name}</span>
-                <button class="icon-button" onclick={ (e) => handleDeleteChat(e, chat.id) }>✕</button>
+                <KKButton preset="plain" class="auto-hide" onclick={ (e) => handleDeleteChat(e, chat.id) }>✕</KKButton>
             </a>
         {/each}
     </div>
     
     <div class="button-group-h-centered">
-        <button class="round">+</button>
-        <button class="round" onclick={ () => jumpTo(-1) }>⚙</button>
+        <KKButton preset="round">+</KKButton>
+        <KKButton preset="round" onclick={ () => jumpTo(-1) }>⚙</KKButton>
     </div>
-    
+
 </div>
 
 <style>
@@ -90,6 +91,10 @@
         align-items: center;
     }
 
+    .chat-item :global(.auto-hide) {
+        display: none; /* hide icon buttons if parent is not selected */
+    }
+
     .chat-item.selected,
     .chat-item:hover {
         background-color: yellow;
@@ -97,8 +102,8 @@
         /* border: yellow 0.25rem solid; */
     }
 
-    .chat-item.selected .icon-button,
-    .chat-item:hover .icon-button {
+    .chat-item.selected :global(.auto-hide),
+    .chat-item:hover :global(.auto-hide) {
         display: flex; /* show icon buttons if parent is selected */
     }
 
@@ -113,61 +118,5 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
-    }
-
-    .icon-button {
-        background: transparent;
-        border: none;
-        color: inherit;
-        font-size: 1.5rem;
-        cursor: pointer;
-        width: 1.5rem;
-        height: 1.5rem;
-        display: none; /* hide by default */
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        margin: 0;
-    }
-
-    button {
-        background-color: black;
-        color: white;
-        /* width: calc(100% - 1rem); */
-        height: 2.5rem;
-        border-radius: 1.25rem;
-        border: grey 0.25rem solid;
-        padding: 0 1rem; /* vertical horizontal; rem means relative to font size */
-        margin: 0.5rem;
-    }
-
-    button.round {
-        width: 2.5rem;
-        padding: 0 0 ;
-    }
-
-    button:hover {
-        animation: breath-scale 1s infinite alternate;
-        color: black;
-    }
-
-    button:active {
-        color: white;
-    }
-
-    @keyframes breath-scale {
-        0% {
-            background-color: yellow;
-            border: yellow 0.25rem solid;
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.02);
-        }
-        100% {
-            background-color: #9bbe00;
-            border: #9bbe00 0.25rem solid;
-            transform: scale(1);
-        }
     }
 </style>
