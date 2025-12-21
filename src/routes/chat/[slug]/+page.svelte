@@ -1,12 +1,12 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { selectedChatId } from "$lib/mocked-data";
+    import { selectChat } from "$lib/mocked-data.svelte";
     import ModelSwitch from "./ModelSwitch.svelte";
 
     const slug = $derived(page.params.slug);
 
     $effect(() => {
-        selectedChatId.set(Number(slug));
+        selectChat(Number(slug));
     });
 </script>
 

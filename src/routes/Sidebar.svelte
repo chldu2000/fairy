@@ -1,20 +1,20 @@
 <script lang="ts">
-    import { chatList, selectedChatId, createChat, deleteChat } from "$lib/mocked-data";
+    import { chatHistory, selectedChat, selectChat, createChat, deleteChat } from "$lib/mocked-data.svelte";
     import { goto } from "$app/navigation";
     import { scale } from "svelte/transition";
 
     function jumpTo(target: number) {
         if (target === -1) {
             // window.location.href = resolve('/settings');
-            selectedChatId.set(null);
+            selectChat(-1);
             goto('/settings');
         } else if (target >= 0) {
             // selectedChatId.set(target);
-            const newChat = createChat("New Chat");
-            console.log("Selected chat:", $selectedChatId);
+            const newChat = createChat('New Chat');
+            console.log(`Selected chat: ${selectedChat.id}`);
             goto(`/chat/${newChat}`);
         } else {
-            console.error("Invalid target for onclick:", target);
+            console.error('Invalid target for onclick:', target);
         }
     }
 
@@ -22,10 +22,10 @@
         event.preventDefault();
         event.stopPropagation();
 
-        console.log("Deleting chat:", id);
+        console.log(`Deleting chat: ${id}`);
         deleteChat(id);
-        if ($selectedChatId === id) {
-            selectedChatId.set(null);
+        if (selectedChat.id === id) {
+            selectChat(-1);
             goto('/');
         }
     }
@@ -36,10 +36,10 @@
         New Chat
     </button>
     <div class="chat-list">
-        {#each [...$chatList].reverse() as chat (chat.id)}
-            <a href={`/chat/${chat.id}`} class="chat-item {$selectedChatId === chat.id ? 'selected' : ''}" transition:scale>
-                {chat.name}
-                <button class='icon-button' onclick={ (e) => handleDeleteChat(e, chat.id) }>✕</button>
+        {#each [...chatHistory.sessions].reverse() as chat (chat.id)}
+            <a href={`/chat/${chat.id}`} class="chat-item {selectedChat.id === chat.id ? "selected" : ""}" transition:scale>
+                <span class="chat-name">{chat.name}</span>
+                <button class="icon-button" onclick={ (e) => handleDeleteChat(e, chat.id) }>✕</button>
             </a>
         {/each}
     </div>
@@ -81,9 +81,9 @@
         text-decoration: none;
         text-align: left;
         line-height: 2rem; /* line height = element height -> vertically center text */
-        white-space: nowrap;
+        /* white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis;
+        text-overflow: ellipsis; */
 
         display: flex;
         justify-content: space-between;
@@ -100,6 +100,13 @@
     .chat-item.selected .icon-button,
     .chat-item:hover .icon-button {
         display: flex; /* show icon buttons if parent is selected */
+    }
+
+    .chat-name {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .button-group-h-centered {
