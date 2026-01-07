@@ -1,9 +1,16 @@
 <script lang="ts">
-	import Header from './Header.svelte';
+    import { onMount } from 'svelte';
+
 	// import './layout.css';
     import Sidebar from './Sidebar.svelte';
+    import { initClientSettings } from '$lib/client.svelte';
 
 	let { children } = $props();
+
+	onMount(() => {
+		console.log('Layout mounted');
+		initClientSettings();
+	});
 </script>
 
 <div class="app">

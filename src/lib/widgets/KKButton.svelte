@@ -8,18 +8,18 @@
         children?: any;
     }
 
-    // Extract customClass from props, rest will be in $restProps
+    // Extract class from props, rest will be in $restProps
     let {
         preset: shape = '',
         class: className = '',
         children,
-        ...restProps 
+        ...restProps
     }: Props = $props();
 </script>
 
 <button
     {...restProps}
-    class="kk-button {className} {shape === 'round' ? 'round' : ''} {shape === 'plain' ? 'plain' : ''}"
+    class="kk-button {className} {shape}"
 >
     {@render children?.()}
 </button>

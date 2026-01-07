@@ -3,6 +3,7 @@
     import { goto } from "$app/navigation";
     import { scale } from "svelte/transition";
     import KKButton from "$lib/widgets/KKButton.svelte";
+    import { settings } from "$lib/client.svelte";
 
     function jumpTo(target: number) {
         if (target === -1) {
@@ -17,6 +18,8 @@
         } else {
             console.error('Invalid target for onclick:', target);
         }
+
+        console.log(`selected provider: ${settings.selectedProvider}`);
     }
 
     function handleDeleteChat(event: Event, id: number) {

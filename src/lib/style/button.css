@@ -18,7 +18,7 @@
 }
 
 .kk-button:hover {
-    animation: breath-scale 1s infinite alternate;
+    animation: breath-scale 2s infinite alternate;
     color: black;
 }
 
@@ -71,8 +71,14 @@
         border: yellow 0.25rem solid;
         transform: scale(1);
     }
+    25% {
+        transform: scale(1.05);
+    }
     50% {
-        transform: scale(1.02);
+        transform: scale(1);
+    }
+    75% {
+        transform: scale(1.05);
     }
     100% {
         background-color: #9bbe00;
