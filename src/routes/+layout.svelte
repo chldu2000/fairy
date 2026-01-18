@@ -3,13 +3,14 @@
 
 	// import './layout.css';
     import Sidebar from './Sidebar.svelte';
-    import { initClientSettings } from '$lib/client.svelte';
+    import { initClientSettings, loadChatHistory } from '$lib/store.svelte';
 
 	let { children } = $props();
 
 	onMount(() => {
 		console.log('Layout mounted');
 		initClientSettings();
+		loadChatHistory();
 	});
 </script>
 

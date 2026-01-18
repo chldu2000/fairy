@@ -1,25 +1,23 @@
 <script lang="ts">
-    import { chatHistory, selectedChat, selectChat, createChat, deleteChat } from "$lib/mocked-data.svelte";
+    // import { chatHistory, selectedChat, selectChat, createChat, deleteChat } from "$lib/mocked-data.svelte";
     import { goto } from "$app/navigation";
     import { scale } from "svelte/transition";
     import KKButton from "$lib/widgets/KKButton.svelte";
-    import { settings } from "$lib/client.svelte";
-
+    import { settings, chatHistory, selectedChat, selectChatSession, createChatSession, deleteChatSession } from "$lib/store.svelte";
+    
     function jumpTo(target: number) {
         if (target === -1) {
             // window.location.href = resolve('/settings');
-            selectChat(-1);
+            // selectChat(-1);
             goto('/settings');
         } else if (target >= 0) {
             // selectedChatId.set(target);
-            const newChat = createChat('New Chat');
-            console.log(`Selected chat: ${selectedChat.id}`);
-            goto(`/chat/${newChat}`);
+            const newChatId = createChatSession('Unnamed Chat');
+            console.log(`Go to chat: ${newChatId}`);
+            goto(`/chat/${newChatId}`);
         } else {
             console.error('Invalid target for onclick:', target);
         }
-
-        console.log(`selected provider: ${settings.selectedProvider}`);
     }
 
     function handleDeleteChat(event: Event, id: number) {
@@ -27,9 +25,8 @@
         event.stopPropagation();
 
         console.log(`Deleting chat: ${id}`);
-        deleteChat(id);
-        if (selectedChat.id === id) {
-            selectChat(-1);
+        deleteChatSession(id);
+        if (chatHistory.size === 0 || selectedChat.id === id) {
             goto('/');
         }
     }
@@ -40,7 +37,7 @@
         New Chat
     </KKButton>
     <div class="chat-list">
-        {#each [...chatHistory.sessions].reverse() as chat (chat.id)}
+        {#each Array.from(chatHistory.values()).reverse() as chat (chat.id)}
             <a href={`/chat/${chat.id}`} class="chat-item {selectedChat.id === chat.id ? "selected" : ""}" transition:scale>
                 <span class="chat-name">{chat.name}</span>
                 <KKButton preset="plain" class="auto-hide" onclick={ (e) => handleDeleteChat(e, chat.id) }>✕</KKButton>
@@ -62,6 +59,7 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
+        border-right: 3px solid gray;
     }
 
     .chat-list {

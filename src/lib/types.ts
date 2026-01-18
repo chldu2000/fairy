@@ -2,6 +2,7 @@ export type Provider = {
     apiSource: 'openai-compatible' | 'ollama';
     endpoint: string;
     apiKey: string | null;
+    model: string;
 }
 
 export type Persona = {
@@ -17,5 +18,14 @@ export type Settings = {
     selectedPersona: string;
 }
 
-// export type Chat = {
-// };
+export type Message = {
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+    // timestamp: string;
+}
+
+export type ChatSession = {
+    id: number;
+    name: string;
+    messages: Message[];
+}
