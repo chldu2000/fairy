@@ -41,7 +41,7 @@ export const POST: RequestHandler = async ({ request }) => {
             }
         });
     } catch(err){
-        console.error('Error in proxy handler:', err);
+        console.error('[Proxy] Error forwarding request:', err);
         throw error(500, 'Internal Server Error');
     }
     

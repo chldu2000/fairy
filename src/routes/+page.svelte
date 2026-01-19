@@ -2,9 +2,9 @@
 	import Counter from './Counter.svelte';
 	import welcome from '$lib/images/svelte-welcome.webp';
 	import welcomeFallback from '$lib/images/svelte-welcome.png';
-	import { selectChat } from '$lib/mocked-data.svelte';
-
-	selectChat(-1);
+    import { deselectChatSession } from '$lib/store.svelte';
+	
+	deselectChatSession();
 </script>
 
 <svelte:head>

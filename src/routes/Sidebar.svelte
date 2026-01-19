@@ -5,15 +5,15 @@
     import KKButton from "$lib/widgets/KKButton.svelte";
     import { settings, chatHistory, selectedChat, selectChatSession, createChatSession, deleteChatSession } from "$lib/store.svelte";
     
-    function jumpTo(target: number) {
+    async function jumpTo(target: number) {
         if (target === -1) {
             // window.location.href = resolve('/settings');
             // selectChat(-1);
             goto('/settings');
         } else if (target >= 0) {
             // selectedChatId.set(target);
-            const newChatId = createChatSession('Unnamed Chat');
-            console.log(`Go to chat: ${newChatId}`);
+            const newChatId = await createChatSession('Unnamed Chat');
+            console.log(`Created chat: ${newChatId}`);
             goto(`/chat/${newChatId}`);
         } else {
             console.error('Invalid target for onclick:', target);
@@ -26,9 +26,6 @@
 
         console.log(`Deleting chat: ${id}`);
         deleteChatSession(id);
-        if (chatHistory.size === 0 || selectedChat.id === id) {
-            goto('/');
-        }
     }
 </script>
 
