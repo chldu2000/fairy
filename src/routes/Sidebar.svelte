@@ -50,13 +50,18 @@
 </div>
 
 <style>
+    @import '$lib/style/animation.css';
+
     .sidebar {
         background-color: #2f2f2f;
         width: 20rem;
-        height: 100vh;
+        /* height: 100vh; */
         display: flex;
         flex-direction: column;
-        border-right: 3px solid gray;
+        /* border-right: 3px solid gray; */
+        /* margin: 4px; */
+        /* padding: 4px; */
+        /* border-radius: 1rem; */
     }
 
     .chat-list {
@@ -95,9 +100,10 @@
 
     .chat-item.selected,
     .chat-item:hover {
-        background-color: yellow;
+        /* background-color: yellow; */
         color: black;
         /* border: yellow 0.25rem solid; */
+        animation: breath 2s infinite alternate;
     }
 
     .chat-item.selected :global(.auto-hide),

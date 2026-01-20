@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { settings, selectedChat, saveChatSession } from './store.svelte';
 
 export function sendMessage(message: string) {
@@ -9,6 +10,9 @@ export function sendMessage(message: string) {
 }
 
 export async function sendMessage_Test(message: string) {
+    // Warning: Avoid calling `fetch` eagerly during server-side rendering — put your `fetch` calls inside `onMount` or a `load` function instead
+    if (!browser) return;
+
     if (selectedChat.session) {
         selectedChat.session.messages.push({ role: 'user', content: message });
         const url = '/api'; // use local API proxy

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import '$lib/style/button.css';
     import type { HTMLButtonAttributes } from 'svelte/elements';
 
     // Define the component's props interface
@@ -23,3 +22,7 @@
 >
     {@render children?.()}
 </button>
+
+<style>
+    @import '$lib/style/button.css';
+</style>

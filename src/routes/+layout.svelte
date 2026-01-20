@@ -16,20 +16,13 @@
 
 <div class="app">
 	<!-- <Header /> -->
-
-	<Sidebar />
+    <aside>
+        <Sidebar />
+    </aside>
 
 	<main>
 		{@render children()}
 	</main>
-
-	
-
-	<!-- <footer>
-		<p>
-			visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to learn about SvelteKit
-		</p>
-	</footer> -->
 </div>
 
 <style>
@@ -44,12 +37,23 @@
 		flex-direction: row;
 		width: 100vw;
 		height: 100vh;
+        gap: 8px;
+        padding: 8px;
+        box-sizing: border-box; /* 使宽高包含 padding 和 border */
+        background-color: grey;
 	}
 
+    .app > * { /* sub elements */
+        border-radius: 1rem;
+        overflow: hidden;
+        display: flex;
+    }
+
+    aside {
+        flex: 0 0 auto; /* flex: grow shrink basis */
+    }
+
 	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		width: 100%;
+		flex: 1; /* 1 1 0 */
 	}
 </style>

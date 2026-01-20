@@ -1,0 +1,32 @@
+@keyframes breath-scale {
+    0% {
+        background-color: yellow;
+        border: yellow; /* not changing border style ...? */
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.05);
+    }
+    50% {
+        transform: scale(1);
+    }
+    75% {
+        transform: scale(1.05);
+    }
+    100% {
+        background-color: #9bbe00;
+        border: #9bbe00;
+        transform: scale(1);
+    }
+}
+
+@keyframes breath {
+    0% {
+        background-color: yellow;
+        border: yellow;
+    }
+    100% {
+        background-color: #9bbe00;
+        border: #9bbe00;
+    }
+}
