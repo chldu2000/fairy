@@ -22,20 +22,45 @@
     });
 </script>
 
-<div class="chat-container">
-    <ModelSwitch />
+<div id="chat-layout">
+    <div id="model-switch-area">
+        <ModelSwitch />
+    </div>
+    
 
     <div>chat slug : {slug}</div>
-    <MsgDisplay />
-    <MsgInput />
+    <div id="msg-display-area">
+        <MsgDisplay />
+    </div>
+    <div id="msg-input-area">
+        <MsgInput />
+    </div>
+    
+    
 </div>
 
 <style>
-    .chat-container {
+    #chat-layout {
         display: flex;
         flex-direction: column;
         flex: 1;
+        margin: 0.75rem;
+    }
 
-        background-color: white;
+    #model-switch-area {
+        display: flex;
+        flex : 0 0 auto;
+    }
+
+    #msg-display-area {
+        display: flex;
+        flex: 1;
+        /* flex-direction: column; */
+        overflow-y: auto;
+    }
+
+    #msg-input-area {
+        display: flex;
+        flex: 0 0 auto;
     }
 </style>

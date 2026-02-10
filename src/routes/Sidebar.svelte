@@ -53,7 +53,6 @@
     @import '$lib/style/animation.css';
 
     .sidebar {
-        background-color: #2f2f2f;
         width: 20rem;
         /* height: 100vh; */
         display: flex;

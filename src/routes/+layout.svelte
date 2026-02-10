@@ -14,7 +14,7 @@
 	});
 </script>
 
-<div class="app">
+<div id="app">
 	<!-- <Header /> -->
     <aside>
         <Sidebar />
@@ -32,7 +32,7 @@
 		padding: 0;
 	} */
 
-	.app {
+	#app {
 		display: flex;
 		flex-direction: row;
 		width: 100vw;
@@ -43,10 +43,13 @@
         background-color: grey;
 	}
 
-    .app > * { /* sub elements */
+    #app > * { /* sub elements */
         border-radius: 1rem;
         overflow: hidden;
         display: flex;
+
+        background-color: #2f2f2f;
+        color: white;
     }
 
     aside {

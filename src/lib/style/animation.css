@@ -1,7 +1,7 @@
-@keyframes breath-scale {
+@keyframes breath-scale-border {
     0% {
         background-color: yellow;
-        border: yellow; /* not changing border style ...? */
+        border-color: yellow;
         transform: scale(1);
     }
     25% {
@@ -15,7 +15,7 @@
     }
     100% {
         background-color: #9bbe00;
-        border: #9bbe00;
+        border-color: #9bbe00;
         transform: scale(1);
     }
 }
@@ -23,10 +23,19 @@
 @keyframes breath {
     0% {
         background-color: yellow;
-        border: yellow;
     }
     100% {
         background-color: #9bbe00;
-        border: #9bbe00;
+    }
+}
+
+@keyframes breath-shadow {
+    0% {
+        background-color: yellow;
+        box-shadow: 0 0 0 6px yellow;
+    }
+    100% {
+        background-color: #9bbe00;
+        box-shadow: 0 0 0 6px #9bbe00;
     }
 }

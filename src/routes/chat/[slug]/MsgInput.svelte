@@ -1,23 +1,40 @@
 <script lang="ts">
-    // import { sendMessage, sendMessage_Test } from "$lib/store.svelte";
-    async function handleSubmit(event: Event) {
+    import { sendMessage_Test } from "$lib/worker.svelte";
+    
+    function handleSubmit(event: Event) {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const input = form.querySelector('input[type="text"]') as HTMLInputElement;
         const message = input.value.trim();
         if (!message) return;
 
-        // 动态加载 sendMessage，避免 SSR 阶段 eager fetch 警告
-        const worker = await import('$lib/worker.svelte');
-        await worker.sendMessage_Test(message);
-        // TODO: handle errors, clear input on component mount, etc.
-        input.value = '';
+        try {
+            sendMessage_Test(message);
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
     }
 </script>
 
-<div>
+<div id="input-layout">
     <form onsubmit={handleSubmit}>
-        <input type="text" placeholder="Type your message here..." />
-        <input type="submit" value="Submit" />
+        <input id="message-input" type="text" placeholder="Type your message here..." />
+        <input id="submit-button" type="submit" value="Submit" />
     </form>
 </div>
+
+<style>
+    #input-layout {
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+    }
+
+    /* #message-input {
+        flex: 1;
+    }
+
+    #submit-button {
+        flex: 0 0 auto;
+    } */
+</style>

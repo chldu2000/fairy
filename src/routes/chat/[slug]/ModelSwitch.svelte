@@ -3,7 +3,7 @@
 
     function handleModelChange(event: Event, level: 'provider' | 'persona') {
         const selectElement = event.target as HTMLOptionElement;
-        console.log(`Changing ${level} to: ${selectElement.value}`);
+        // console.log(`Changing ${level} to: ${selectElement.value}`);
         if (level === 'provider') {
             settings.selectedProvider = selectElement.value;
         } else {
@@ -42,7 +42,9 @@
 <style>
     .model-switch {
         background-color: #f0f0f0;
+        color: black;
         display: flex;
+        flex: 1;
         flex-direction: row;
     }
 

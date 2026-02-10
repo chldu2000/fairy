@@ -26,8 +26,6 @@
 		justify-content: center;
 		align-items: center;
 		flex: 1;
-		background-color: #2f2f2f;
-		color: white;
 	}
 
 	h1 {

@@ -20,7 +20,7 @@
 }
 
 .kk-button:hover {
-    animation: breath-scale 2s infinite alternate;
+    animation: breath-scale-border 2s infinite alternate;
     color: black;
 }
 
