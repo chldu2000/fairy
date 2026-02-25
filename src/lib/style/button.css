@@ -5,7 +5,7 @@
     color: white;
     height: 2.5rem;
     border-radius: 1.25rem;
-    border: grey 4px solid;
+    border: grey 3px solid;
     padding: 0 1rem;
     margin: 0.5rem;
     cursor: pointer;
@@ -20,7 +20,7 @@
 }
 
 .kk-button:hover {
-    animation: breath-scale-border 2s infinite alternate;
+    animation: breath-scale-border 1.25s infinite alternate;
     color: black;
 }
 

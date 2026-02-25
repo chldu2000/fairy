@@ -1,14 +1,21 @@
 export type Provider = {
-    apiSource: 'openai-compatible' | 'ollama';
+    name: string;
+    apiType: 'openai-compatible' | 'ollama';
     endpoint: string;
     apiKey: string | null;
     model: string;
 }
 
 export type Persona = {
+    name: string;
     description: string;
     systemPrompt: string;
     icon?: string;
+}
+
+export type Preferences = {
+    provider: string;
+    persona: string;
 }
 
 export type Settings = {

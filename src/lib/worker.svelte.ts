@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
-import { settings, selectedChat, saveChatSession } from './store.svelte';
+import { providers, preferences, selectedChat, saveChatSession } from './store.svelte';
 
-export function sendMessage(message: string) {
+export async function sendMessage(message: string) {
     if (selectedChat.session) {
         selectedChat.session.messages.push({ role: 'user', content: message });
         const response = 'This is a mocked response';
@@ -17,8 +17,8 @@ export async function sendMessage_Test(message: string) {
         selectedChat.session.messages.push({ role: 'user', content: message });
         const url = '/api'; // use local API proxy
         const body = {
-            target: `${settings.providers[settings.selectedProvider].endpoint}/v1/chat/completions`,
-            model: settings.providers[settings.selectedProvider].model,
+            target: `${providers.get(preferences.provider)?.endpoint}/v1/chat/completions`,
+            model: providers.get(preferences.provider)?.model,
             messages: selectedChat.session.messages,
             temperature: 0.7,
             stream: false,
@@ -26,8 +26,8 @@ export async function sendMessage_Test(message: string) {
         const headers: Record<string, string> = {
             'Content-Type': 'application/json'
         }
-        if (settings.providers[settings.selectedProvider].apiKey) {
-            headers['Authorization'] = `Bearer ${settings.providers[settings.selectedProvider].apiKey}`;
+        if (providers.get(preferences.provider)?.apiKey) {
+            headers['Authorization'] = `Bearer ${providers.get(preferences.provider)?.apiKey}`;
         }
         const response = await fetch(url, {
             method: 'POST',

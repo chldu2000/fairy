@@ -1,16 +1,17 @@
 <script lang="ts">
-    import { settings, saveClientSettings } from "$lib/store.svelte";
+    import { preferences, savePreference, providers, personas } from "$lib/store.svelte";
 
     function handleModelChange(event: Event, level: 'provider' | 'persona') {
         const selectElement = event.target as HTMLOptionElement;
         // console.log(`Changing ${level} to: ${selectElement.value}`);
         if (level === 'provider') {
-            settings.selectedProvider = selectElement.value;
+            preferences.provider = selectElement.value;
+            savePreference('provider', selectElement.value);
         } else {
-            settings.selectedPersona = selectElement.value;
+            preferences.persona = selectElement.value;
+            savePreference('persona', selectElement.value);
         }
-        saveClientSettings();
-        console.log(`Selected ${level} changed to: ${settings.selectedProvider}`);
+        console.log(`Selected ${level} changed to: ${preferences[level]}`);
     }
 </script>
 
@@ -18,22 +19,22 @@
     <div class="provider-select">
         <span>Provider:</span>
         <select
-            bind:value={settings.selectedProvider}
+            bind:value={preferences.provider}
             onchange={(e) => handleModelChange(e, 'provider')}
         >
-            {#each Object.keys(settings.providers) as model}
-                <option value={model}>{model}</option>
+            {#each Array.from(providers.keys()) as key}
+                <option value={key}>{key}</option>
             {/each}
         </select>
     </div>
     <div class="persona-select">
         <span>Persona:</span>
         <select
-            bind:value={settings.selectedPersona}
+            bind:value={preferences.persona}
             onchange={(e) => handleModelChange(e, 'persona')}
         >
-            {#each Object.keys(settings.personas) as persona}
-                <option value={persona}>{persona}</option>
+            {#each Array.from(personas.keys()) as key}
+                <option value={key}>{key}</option>
             {/each}
         </select>
     </div>

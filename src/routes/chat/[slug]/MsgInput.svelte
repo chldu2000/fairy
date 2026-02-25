@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { sendMessage_Test } from "$lib/worker.svelte";
+    import { sendMessage } from "$lib/worker.svelte";
     
     function handleSubmit(event: Event) {
         event.preventDefault();
@@ -9,7 +9,7 @@
         if (!message) return;
 
         try {
-            sendMessage_Test(message);
+            sendMessage(message);
         } catch (error) {
             console.error("Error sending message:", error);
         }

@@ -1,13 +1,22 @@
 import { SvelteMap } from "svelte/reactivity";
-import type { ChatSession, Settings } from "./types";
+import { type Provider, type ChatSession, type Persona, type Preferences } from "./types";
 
 async function openIDB(): Promise<IDBDatabase> {
     return new Promise<IDBDatabase>((resolve, reject) => {
         const request = indexedDB.open('fairy-db', 1);
         request.onupgradeneeded = () => {
             const db = request.result;
-            if (!db.objectStoreNames.contains('settings')) {
-                db.createObjectStore('settings', { keyPath: 'key' });
+            // if (!db.objectStoreNames.contains('settings')) { // 分开存储 provider 和 persona
+            //     db.createObjectStore('settings', { keyPath: 'key' });
+            // }
+            if (!db.objectStoreNames.contains('providers')) {
+                db.createObjectStore('providers', { keyPath: 'name' });
+            }
+            if (!db.objectStoreNames.contains('personas')) {
+                db.createObjectStore('personas', { keyPath: 'name' });
+            }
+            if (!db.objectStoreNames.contains('preferences')) {
+                db.createObjectStore('preferences', { keyPath: 'key' });
             }
             if (!db.objectStoreNames.contains('chatHistory')) {
                 db.createObjectStore('chatHistory', { keyPath: 'id' });
@@ -62,74 +71,108 @@ async function idbDelete(storeName: string, key: IDBValidKey): Promise<void> {
     });
 }
 
-export const settings = $state(
-    {
-        providers: {},
-        personas: {},
-        selectedProvider: '',
-        selectedPersona: ''
-    }
-) as Settings;
+export const providers = $state(new SvelteMap<string, Provider>()) as SvelteMap<string, Provider>;
+export const personas = $state(new SvelteMap<string, Persona>()) as SvelteMap<string, Persona>;
+export const preferences = $state({
+    provider: '',
+    persona: '',
+}) as Preferences;
 
-const defaultSettings : Settings = {
-    providers: {
-        'OpenAI': {
-            apiSource: 'openai-compatible',
-            endpoint: 'https://api.openai.com',
-            apiKey: null,
-            model: 'gpt-4'
-        },
-        'Local Ollama': {
-            apiSource: 'ollama',
-            endpoint: 'http://localhost:11434',
-            apiKey: null,
-            model: 'llama2'
-        },
-        'Test': {
-            apiSource: 'openai-compatible',
-            endpoint: 'http://127.0.0.1:1234',
-            apiKey: null,
-            model: 'qwen/qwen3-vl-4b'
-        }
-    },
-    personas: {
-        'Default': {
-            description: 'A helpful assistant.',
-            systemPrompt: 'You are a helpful assistant.'
-        }
-    },
-    selectedProvider: 'Test',
-    selectedPersona: 'Default'
+const defaultProvider: Provider = {
+    name: 'Local API',
+    apiType: 'openai-compatible',
+    endpoint: 'http://127.0.0.1:1234',
+    apiKey: null,
+    model: 'qwen/qwen3-vl-4b'
 };
 
-export async function loadClientSettings() {
-    console.log('loadClientSettings');
+const defaultPersona: Persona = {
+    name: 'Assistant',
+    description: 'A helpful assistant.',
+    systemPrompt: 'You are a helpful assistant.'
+};
+
+export async function loadPreferences() {
+    console.log('loadPreferences')
     try {
-        const record = await idbGet('settings', 'clientSettings') as { key: string, value: Settings };
-        if (record && record.value) {
-            const storedSettings = record.value;
-            settings.providers = storedSettings.providers;
-            settings.personas = storedSettings.personas;
-            settings.selectedProvider = storedSettings.selectedProvider;
-            settings.selectedPersona = storedSettings.selectedPersona;
+        const storedProviders = await idbGetAll('providers') as Provider[];
+        if (storedProviders.length > 0) {
+            for (const provider of storedProviders) {
+                providers.set(provider.name, provider);
+            }
         } else {
-            settings.providers = defaultSettings.providers;
-            settings.personas = defaultSettings.personas;
-            settings.selectedProvider = defaultSettings.selectedProvider;
-            settings.selectedPersona = defaultSettings.selectedPersona;
+            providers.set('Local API', defaultProvider);
+            await saveProvider(defaultProvider);
         }
-    } catch (e) {
-        console.error('Error loading settings from IndexedDB:', e);
+
+        const storedPersonas = await idbGetAll('personas') as Persona[];
+        if (storedPersonas.length > 0) {
+            for (const persona of storedPersonas) {
+                personas.set(persona.name, persona);
+            }
+        } else {
+            personas.set('Assistant', defaultPersona);
+            await savePersona(defaultPersona);
+        }
+
+        const storedProviderSelection = await idbGet('preferences', 'provider') as { key: string, value: string };
+        if (storedProviderSelection) {
+            preferences.provider = storedProviderSelection.value;
+        } else {
+            preferences.provider = defaultProvider.name;
+            await savePreference('provider', defaultProvider.name);
+        }
+
+        const storedPersonaSelection = await idbGet('preferences', 'persona') as { key: string, value: string };
+        if (storedPersonaSelection) {
+            preferences.persona = storedPersonaSelection.value;
+        } else {
+            preferences.persona = defaultPersona.name;
+            await savePreference('persona', defaultPersona.name);
+        }
+    } catch (error) {
+        console.error('Error loading data from IndexedDB:', error);
     }
 }
 
-export async function saveClientSettings() {
-    console.log('saveClientSettings');
+export async function saveProvider(provider: Provider) {
+    console.log('saveProvider', provider.name);
     try {
-        const snapshot = $state.snapshot(settings);
-        await idbPut('settings', { key: 'clientSettings', value: snapshot });
+        await idbPut('providers', provider);
+        providers.set(provider.name, provider);
     } catch (e) {
-        console.error('Error saving settings to IndexedDB:', e);
+        console.error('Error saving provider to IndexedDB:', e);
+    }
+}
+
+export async function savePersona(persona: Persona) {
+    console.log('savePersona', persona.name);
+    try {
+        await idbPut('personas', persona);
+        personas.set(persona.name, persona);
+    } catch (e) {
+        console.error('Error saving persona to IndexedDB:', e);
+    }
+}
+
+export async function savePreference(key: string, value: string) {
+    console.log('savePreference', key, value);
+    if (key !== 'provider' && key !== 'persona') {
+        console.error('Invalid preference key:', key);
+        return;
+    } else if (key === 'provider' && !providers.has(value)) {
+        console.error('Trying to set provider preference to non-existent provider:', value);
+        return;
+    } else if (key === 'persona' && !personas.has(value)) {
+        console.error('Trying to set persona preference to non-existent persona:', value);
+        return;
+    }
+
+    try {
+        await idbPut('preferences', { key, value });
+        preferences[key] = value;
+    } catch (e) {
+        console.error('Error saving preference to IndexedDB:', e);
     }
 }
 
@@ -138,7 +181,7 @@ export const selectedChat = $state({
     session: {} as ChatSession
 }) as { id: number, session: ChatSession };
 
-export const chatHistory = $state(new SvelteMap<number, ChatSession>()) as SvelteMap<number, ChatSession>;
+export const chatHistory = $state(new SvelteMap<number, ChatSession>) as SvelteMap<number, ChatSession>;
 
 export function deselectChatSession() {
     selectedChat.id = -1;
@@ -177,10 +220,12 @@ export function selectChatSession(id: number) {
 export async function createChatSession(name: string): Promise<number> {
     try {
         const newId = chatHistory.size > 0 ? Math.max(...chatHistory.keys()) + 1 : 0;
+        const systemPrompt = personas.get(preferences.persona)?.systemPrompt || defaultPersona.systemPrompt;
+        
         const newSession: ChatSession = {
             id: newId,
             name,
-            messages: [{ role: 'system', content: settings.personas[settings.selectedPersona].systemPrompt }]
+            messages: [{ role: 'system', content: systemPrompt }]
         };
         chatHistory.set(newId, newSession);
         await saveChatSession(newSession);
