@@ -127,8 +127,9 @@ export async function loadPreferences() {
 export async function saveProvider(provider: Provider) {
     console.log('saveProvider', provider.name);
     try {
-        await idbPut('providers', provider);
-        providers.set(provider.name, provider);
+        const providerSnapshot = $state.snapshot(provider);
+        await idbPut('providers', providerSnapshot);
+        providers.set(provider.name, providerSnapshot);
     } catch (e) {
         console.error('Error saving provider to IndexedDB:', e);
     }
@@ -162,6 +163,24 @@ export async function savePreference(key: string, value: string) {
         preferences[key] = value;
     } catch (e) {
         console.error('Error saving preference to IndexedDB:', e);
+    }
+}
+
+export async function deleteProvider(name: string) {
+    console.log('deleteProvider', name);
+    try {
+        await idbDelete('providers', name);
+        providers.delete(name);
+
+        // 如果删除的是当前选中的 provider，需要更新 preferences
+        if (preferences.provider === name) {
+            const remainingProviders = Array.from(providers.keys());
+            if (remainingProviders.length > 0) {
+                await savePreference('provider', remainingProviders[0]);
+            }
+        }
+    } catch (e) {
+        console.error('Error deleting provider from IndexedDB:', e);
     }
 }
 

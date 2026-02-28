@@ -1,5 +1,4 @@
 <script lang="ts">
-    // import { chatHistory, selectedChat, selectChat, createChat, deleteChat } from "$lib/mocked-data.svelte";
     import { goto } from "$app/navigation";
     import { scale } from "svelte/transition";
     import KKButton from "$lib/widgets/KKButton.svelte";

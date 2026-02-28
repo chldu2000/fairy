@@ -22,7 +22,6 @@ export async function sendMessage(message: string) {
         selectedChat.session.messages.push({ role: 'assistant', content: '' });
 
         const url = '/api'; // use local API proxy
-        console.log(providers.get(preferences.provider)?.name);
         const targetBaseUrl = providers.get(preferences.provider)?.baseUrl || '';
         const targetEndpoint =  providerApiEndpoints[providers.get(preferences.provider)?.apiType || ProviderType.OpenAICompatible];
         const body = {
