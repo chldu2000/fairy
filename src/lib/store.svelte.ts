@@ -1,9 +1,11 @@
 import { SvelteMap } from "svelte/reactivity";
 import { type Provider, type ChatSession, type Persona, type Preferences } from "./types";
 
+const DB_VERSION = 2; // TODO: bump this when DB schema changes
+
 async function openIDB(): Promise<IDBDatabase> {
     return new Promise<IDBDatabase>((resolve, reject) => {
-        const request = indexedDB.open('fairy-db', 1);
+        const request = indexedDB.open('fairy-db', DB_VERSION);
         request.onupgradeneeded = () => {
             const db = request.result;
             // if (!db.objectStoreNames.contains('settings')) { // 分开存储 provider 和 persona
@@ -205,6 +207,8 @@ export async function saveChatSession(session: ChatSession) {
     try {
         const snapshot = $state.snapshot(session);
         await idbPut('chatHistory', snapshot);
+        // 更新 chatHistory 中的会话数据，确保切换会话时能看到最新消息
+        chatHistory.set(session.id, snapshot);
     } catch (e) {
         console.error('Error saving chat session to IndexedDB:', e);
     }

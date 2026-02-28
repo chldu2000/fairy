@@ -6,6 +6,7 @@
         const form = event.target as HTMLFormElement;
         const input = form.querySelector('input[type="text"]') as HTMLInputElement;
         const message = input.value.trim();
+        input.value = "";
         if (!message) return;
 
         try {
