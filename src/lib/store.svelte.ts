@@ -1,5 +1,6 @@
 import { SvelteMap } from "svelte/reactivity";
 import { type Provider, type ChatSession, type Persona, type Preferences } from "./types";
+import { defaultProvider, defaultPersona } from "./constants";
 
 const DB_VERSION = 2; // TODO: bump this when DB schema changes
 
@@ -80,20 +81,6 @@ export const preferences = $state({
     persona: '',
 }) as Preferences;
 
-const defaultProvider: Provider = {
-    name: 'Local API',
-    apiType: 'openai-compatible',
-    endpoint: 'http://127.0.0.1:1234',
-    apiKey: null,
-    model: 'qwen/qwen3-vl-4b'
-};
-
-const defaultPersona: Persona = {
-    name: 'Assistant',
-    description: 'A helpful assistant.',
-    systemPrompt: 'You are a helpful assistant.'
-};
-
 export async function loadPreferences() {
     console.log('loadPreferences')
     try {
@@ -103,7 +90,7 @@ export async function loadPreferences() {
                 providers.set(provider.name, provider);
             }
         } else {
-            providers.set('Local API', defaultProvider);
+            providers.set(defaultProvider.name, defaultProvider);
             await saveProvider(defaultProvider);
         }
 
@@ -113,7 +100,7 @@ export async function loadPreferences() {
                 personas.set(persona.name, persona);
             }
         } else {
-            personas.set('Assistant', defaultPersona);
+            personas.set(defaultPersona.name, defaultPersona);
             await savePersona(defaultPersona);
         }
 

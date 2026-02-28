@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { providerApiEndpoints, ProviderType } from './constants';
 import { providers, preferences, selectedChat, saveChatSession } from './store.svelte';
 
 export async function sendMessage_Test(message: string) {
@@ -21,8 +22,11 @@ export async function sendMessage(message: string) {
         selectedChat.session.messages.push({ role: 'assistant', content: '' });
 
         const url = '/api'; // use local API proxy
+        console.log(providers.get(preferences.provider)?.name);
+        const targetBaseUrl = providers.get(preferences.provider)?.baseUrl || '';
+        const targetEndpoint =  providerApiEndpoints[providers.get(preferences.provider)?.apiType || ProviderType.OpenAICompatible];
         const body = {
-            target: `${providers.get(preferences.provider)?.endpoint}/v1/chat/completions`,
+            target: `${targetBaseUrl}${targetEndpoint}`,
             model: providers.get(preferences.provider)?.model,
             messages: selectedChat.session.messages,
             temperature: 0.7,

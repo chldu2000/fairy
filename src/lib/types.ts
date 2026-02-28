@@ -1,7 +1,9 @@
+import type { ProviderType } from "./constants";
+
 export type Provider = {
     name: string;
-    apiType: 'openai-compatible' | 'ollama';
-    endpoint: string;
+    apiType: ProviderType;
+    baseUrl: string;
     apiKey: string | null;
     model: string;
 }
