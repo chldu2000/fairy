@@ -1,13 +1,14 @@
 <script lang="ts">
     import { deselectChatSession } from "$lib/store.svelte";
     import Providers from "./Providers.svelte";
+    import Personas from "./Personas.svelte";
 
     import { providers, personas, preferences } from "$lib/store.svelte";
 
     deselectChatSession();
 
     let activeTab: string = 'providers';
-    const tabs: string[] = ['providers', 'personas', 'test'];
+    const tabs: string[] = ['providers', 'personas'];
 
     function changeTab(tab: string) {
         activeTab = tab;
@@ -32,7 +33,7 @@
             <Providers providers={providers} />
         {/if}
         {#if activeTab === 'personas'}
-            <div>Personas content</div>
+            <Personas personas={personas} />
         {/if}
     </div>
 </div>
@@ -92,7 +93,7 @@
 
         /* filter: drop-shadow(0 0 6px yellow); */
 
-        transform: scale(1.25);
+        transform: scale(1.2);
 
         /* clip-path:; */
 
@@ -100,7 +101,7 @@
     }
 
     .tab.active span {
-        transform: scale(0.8);
+        transform: scale(0.8333);
     }
 
     .tab:first-child {
@@ -124,12 +125,12 @@
         mask-image: url($lib/images/tab-side.png);
         mask-size: 100% 100%;
         mask-repeat: no-repeat;
-        transform: rotate(180deg) scale(1.25);
+        transform: rotate(180deg) scale(1.2);
         transform-origin: center;
     }
 
     .tab:last-child.active span {
-        transform: rotate(-180deg) scale(0.8);
+        transform: rotate(-180deg) scale(0.8333);
         transform-origin: center;
     }
 </style>

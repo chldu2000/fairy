@@ -138,10 +138,29 @@ export async function saveProvider(provider: Provider) {
 export async function savePersona(persona: Persona) {
     console.log('savePersona', persona.name);
     try {
-        await idbPut('personas', persona);
-        personas.set(persona.name, persona);
+        const personaSnapshot = $state.snapshot(persona);
+        await idbPut('personas', personaSnapshot);
+        personas.set(persona.name, personaSnapshot);
     } catch (e) {
         console.error('Error saving persona to IndexedDB:', e);
+    }
+}
+
+export async function deletePersona(name: string) {
+    console.log('deletePersona', name);
+    try {
+        await idbDelete('personas', name);
+        personas.delete(name);
+
+        // 如果删除的是当前选中的 persona，需要更新 preferences
+        if (preferences.persona === name) {
+            const remainingPersonas = Array.from(personas.keys());
+            if (remainingPersonas.length > 0) {
+                await savePreference('persona', remainingPersonas[0]);
+            }
+        }
+    } catch (e) {
+        console.error('Error deleting persona from IndexedDB:', e);
     }
 }
 

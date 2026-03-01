@@ -1,33 +1,31 @@
 <script lang="ts">
-    import type { Provider } from '$lib/types';
+    import type { Persona } from '$lib/types';
     import type { SvelteMap } from 'svelte/reactivity';
-    import { saveProvider, deleteProvider } from '$lib/store.svelte';
-    import { ProviderType } from '$lib/constants';
+    import { savePersona, deletePersona } from '$lib/store.svelte';
 
     type Props = {
-        providers: SvelteMap<string, Provider>;
+        personas: SvelteMap<string, Persona>;
     };
 
-    let { providers }: Props = $props();
+    let { personas }: Props = $props();
 
     // 状态管理
     let isFormVisible = $state(false);
     let isEditing = $state(false);
     let editingName = ''; // 用于编辑时存储原始名称
     let showDeleteConfirm = $state(false);
-    let providerToDelete = $state('');
+    let personaToDelete = $state('');
 
     // 表单数据
-    let formData: Provider = $state({
+    let formData: Persona = $state({
         name: '',
-        apiType: ProviderType.OpenAICompatible,
-        baseUrl: '',
-        apiKey: null,
-        model: ''
-    }) as Provider;
+        description: '',
+        systemPrompt: '',
+        icon: ''
+    }) as Persona;
 
     // 验证错误
-    let errors: Partial<Record<keyof Provider, string>> = $state({}) as Partial<Record<keyof Provider, string>>;
+    let errors: Partial<Record<keyof Persona, string>> = $state({}) as Partial<Record<keyof Persona, string>>;
 
     // 打开新增表单
     function openAddForm() {
@@ -35,10 +33,9 @@
         editingName = '';
         formData = {
             name: '',
-            apiType: ProviderType.OpenAICompatible,
-            baseUrl: '',
-            apiKey: null,
-            model: ''
+            description: '',
+            systemPrompt: '',
+            icon: ''
         };
         errors = {};
         isFormVisible = true;
@@ -46,11 +43,11 @@
 
     // 打开编辑表单
     function openEditForm(name: string) {
-        const provider = providers.get(name);
-        if (provider) {
+        const persona = personas.get(name);
+        if (persona) {
             isEditing = true;
             editingName = name;
-            formData = { ...provider };
+            formData = { ...persona };
             errors = {};
             isFormVisible = true;
         }
@@ -58,26 +55,20 @@
 
     // 验证表单
     function validateForm(): boolean {
-        const newErrors: Partial<Record<keyof Provider, string>> = {};
+        const newErrors: Partial<Record<keyof Persona, string>> = {};
 
         if (!formData.name.trim()) {
             newErrors.name = '名称不能为空';
-        } else if ((!isEditing || formData.name !== editingName) && providers.has(formData.name)) {
-            newErrors.name = 'Provider 名称已存在';
+        } else if ((!isEditing || formData.name !== editingName) && personas.has(formData.name)) {
+            newErrors.name = 'Persona 名称已存在';
         }
 
-        if (!formData.baseUrl.trim()) {
-            newErrors.baseUrl = 'Base URL 不能为空';
-        } else {
-            try {
-                new URL(formData.baseUrl);
-            } catch {
-                newErrors.baseUrl = '请输入有效的 URL';
-            }
+        if (!formData.description.trim()) {
+            newErrors.description = '描述不能为空';
         }
 
-        if (!formData.model.trim()) {
-            newErrors.model = 'Model 不能为空';
+        if (!formData.systemPrompt.trim()) {
+            newErrors.systemPrompt = '系统提示词不能为空';
         }
 
         errors = newErrors;
@@ -88,14 +79,14 @@
     async function handleSubmit() {
         if (validateForm()) {
             try {
-                await saveProvider(formData);
+                await savePersona(formData);
                 isFormVisible = false;
                 // 如果是编辑模式且名称改变，需要删除旧记录
                 if (isEditing && formData.name !== editingName) {
-                    await deleteProvider(editingName);
+                    await deletePersona(editingName);
                 }
             } catch (error) {
-                console.error('Error saving provider:', error);
+                console.error('Error saving persona:', error);
                 alert('保存失败，请重试');
             }
         }
@@ -108,50 +99,53 @@
 
     // 打开删除确认
     function openDeleteConfirm(name: string) {
-        providerToDelete = name;
+        personaToDelete = name;
         showDeleteConfirm = true;
     }
 
     // 取消删除
     function cancelDelete() {
         showDeleteConfirm = false;
-        providerToDelete = '';
+        personaToDelete = '';
     }
 
     // 确认删除
     async function confirmDelete() {
         try {
-            await deleteProvider(providerToDelete);
+            await deletePersona(personaToDelete);
             showDeleteConfirm = false;
-            providerToDelete = '';
+            personaToDelete = '';
         } catch (error) {
-            console.error('Error deleting provider:', error);
+            console.error('Error deleting persona:', error);
             alert('删除失败，请重试');
         }
     }
 </script>
 
-<div class="providers-container">
+<div class="personas-container">
     <!-- 操作栏 -->
     <div class="action-bar">
         <button class="add-button" onclick={openAddForm}>
-            新增 Provider
+            新增 Persona
         </button>
     </div>
 
-    <!-- Provider 列表 -->
-    <div class="provider-list">
-        {#each providers.entries() as [name, provider] (name)}
-            <div class="provider-item">
-                <div class="provider-info">
-                    <div class="provider-name">{name}</div>
-                    <div class="provider-details">
-                        <span>Type: {provider.apiType}</span>
-                        <span>URL: {provider.baseUrl}</span>
-                        <span>Model: {provider.model}</span>
+    <!-- Persona 列表 -->
+    <div class="persona-list">
+        {#each personas.entries() as [name, persona] (name)}
+            <div class="persona-item">
+                <div class="persona-info">
+                    <div class="persona-name">
+                        {#if persona.icon}
+                            <span class="persona-icon">{persona.icon}</span>
+                        {/if}
+                        {name}
+                    </div>
+                    <div class="persona-details">
+                        <span>描述: {persona.description}</span>
                     </div>
                 </div>
-                <div class="provider-actions">
+                <div class="persona-actions">
                     <button class="edit-button" onclick={() => openEditForm(name)}>
                         编辑
                     </button>
@@ -168,16 +162,16 @@
         <div class="form-overlay" onclick={handleCancel} aria-hidden="true" ></div>
         <div class="form-container">
             <div class="form-header">
-                <h2>{isEditing ? '编辑 Provider' : '新增 Provider'}</h2>
+                <h2>{isEditing ? '编辑 Persona' : '新增 Persona'}</h2>
             </div>
-            <form class="provider-form" onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+            <form class="persona-form" onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
                 <div class="form-field">
                     <label for="name">名称 *</label>
                     <input
                         id="name"
                         type="text"
                         bind:value={formData.name}
-                        placeholder="输入 Provider 名称"
+                        placeholder="输入 Persona 名称"
                     />
                     {#if errors.name}
                         <span class="error">{errors.name}</span>
@@ -185,47 +179,38 @@
                 </div>
 
                 <div class="form-field">
-                    <label for="apiType">API 类型 *</label>
-                    <select id="apiType" bind:value={formData.apiType}>
-                        {#each Object.values(ProviderType) as apiType}
-                            <option value={apiType}>{apiType}</option>
-                        {/each}
-                    </select>
+                    <label for="icon">图标</label>
+                    <input
+                        id="icon"
+                        type="text"
+                        bind:value={formData.icon}
+                        placeholder="可选，例如: 🤖"
+                    />
                 </div>
 
                 <div class="form-field">
-                    <label for="baseUrl">Base URL *</label>
+                    <label for="description">描述 *</label>
                     <input
-                        id="baseUrl"
+                        id="description"
                         type="text"
-                        bind:value={formData.baseUrl}
-                        placeholder="https://api.example.com"
+                        bind:value={formData.description}
+                        placeholder="输入 Persona 描述"
                     />
-                    {#if errors.baseUrl}
-                        <span class="error">{errors.baseUrl}</span>
+                    {#if errors.description}
+                        <span class="error">{errors.description}</span>
                     {/if}
                 </div>
 
                 <div class="form-field">
-                    <label for="apiKey">API Key</label>
-                    <input
-                        id="apiKey"
-                        type="password"
-                        bind:value={formData.apiKey}
-                        placeholder="可选"
-                    />
-                </div>
-
-                <div class="form-field">
-                    <label for="model">Model *</label>
-                    <input
-                        id="model"
-                        type="text"
-                        bind:value={formData.model}
-                        placeholder="例如: gpt-3.5-turbo"
-                    />
-                    {#if errors.model}
-                        <span class="error">{errors.model}</span>
+                    <label for="systemPrompt">系统提示词 *</label>
+                    <textarea
+                        id="systemPrompt"
+                        bind:value={formData.systemPrompt}
+                        placeholder="输入系统提示词"
+                        rows={6}
+                    ></textarea>
+                    {#if errors.systemPrompt}
+                        <span class="error">{errors.systemPrompt}</span>
                     {/if}
                 </div>
 
@@ -249,7 +234,7 @@
                 <h3>确认删除</h3>
             </div>
             <div class="confirm-body">
-                <p>确定要删除 Provider "{providerToDelete}" 吗？</p>
+                <p>确定要删除 Persona "{personaToDelete}" 吗？</p>
                 <p class="warning">此操作无法撤销。</p>
             </div>
             <div class="confirm-actions">
@@ -265,7 +250,7 @@
 </div>
 
 <style>
-    .providers-container {
+    .personas-container {
         padding: 1rem;
     }
 
@@ -287,13 +272,13 @@
         background-color: #0051cc;
     }
 
-    .provider-list {
+    .persona-list {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
     }
 
-    .provider-item {
+    .persona-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -303,25 +288,28 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    .provider-info {
+    .persona-info {
         flex: 1;
     }
 
-    .provider-name {
+    .persona-name {
         color: #333;
         font-weight: bold;
         margin-bottom: 0.25rem;
         font-size: 1.1rem;
     }
 
-    .provider-details {
-        display: flex;
-        gap: 1rem;
+    .persona-icon {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .persona-details {
         font-size: 0.9rem;
         color: #666;
     }
 
-    .provider-actions {
+    .persona-actions {
         display: flex;
         gap: 0.5rem;
     }
@@ -374,7 +362,7 @@
         color: #333;
     }
 
-    .provider-form {
+    .persona-form {
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -392,15 +380,20 @@
     }
 
     .form-field input,
-    .form-field select {
+    .form-field textarea {
         padding: 0.5rem;
         border: 1px solid #ddd;
         border-radius: 4px;
         font-size: 1rem;
     }
 
+    .form-field textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
     .form-field input:focus,
-    .form-field select:focus {
+    .form-field textarea:focus {
         outline: none;
         border-color: #0070f3;
         box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);

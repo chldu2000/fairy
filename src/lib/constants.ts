@@ -1,15 +1,17 @@
 import type { Provider, Persona } from "./types";
 
 export enum ProviderType {
-    OpenAICompatible = 'openai-compatible'
+    OpenAICompatible = 'openai-compatible',
+    VolcEngine = 'volcengine',
 }
 
 export const providerApiEndpoints: Record<ProviderType, string> = {
     [ProviderType.OpenAICompatible]: '/v1/chat/completions',
+    [ProviderType.VolcEngine]: '/api/v3/chat/completions',
 };
 
 export const defaultProvider: Provider = {
-    name: 'Local API',
+    name: 'LMStudio OpenAI Compatible API',
     apiType: ProviderType.OpenAICompatible,
     baseUrl: 'http://127.0.0.1:1234',
     apiKey: null,
