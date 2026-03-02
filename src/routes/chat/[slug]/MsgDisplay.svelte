@@ -17,13 +17,18 @@
 
 <div id="msg-display-layout">
     <!-- Here will be the message display area. -->
-    <!-- <div>Messages count: {messages.length}</div> -->
-    <!-- <div>Messages:</div> -->
     <div id="messages-container">
-        {#each messages as message, index}
-            <div class={`message ${message.role}`}>
-                <span class="role">{message.role}:</span>
-                <span class="content">{@html marked(message.content)}</span>
+        {#each messages as message, _}
+            <div class={`message-wrapper ${message.role}`}>
+                {#if message.role === 'assistant'}
+                    <div class={`avatar assistant-avatar`}>🧿</div>
+                {/if}
+                <div class={`message-bubble ${message.role}`}>
+                    <div class="message-content">{@html marked(message.content)}</div>
+                </div>
+                {#if message.role === 'user'}
+                    <div class="avatar user-avatar">👤</div>
+                {/if}
             </div>
         {/each}
         {#if isTyping()}
@@ -41,6 +46,7 @@
     #msg-display-layout {
         height: 100%;
         display: flex;
+        flex: 1;
         flex-direction: column;
     }
 
@@ -51,27 +57,134 @@
         min-height: 0; /* 确保flex子元素可以收缩 */
     }
 
-    .message {
-        margin-bottom: 8px;
-        padding: 4px;
-        border-radius: 4px;
+    .message-wrapper.user {
+        padding-right: 12px;
     }
 
-    .message.user {
-        background-color: black;
+    .message-wrapper.assistant {
+        padding-left: 12px;
     }
 
-    .message.assistant {
-        background-color: black;
+    .message-wrapper {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        max-width: 100%;
     }
 
-    .role {
-        font-weight: bold;
-        margin-right: 8px;
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin: 0 8px;
+        border: 2px solid #e0e0e0;
+        background-color: white;
+        flex-shrink: 0;
     }
 
-    .content {
-        white-space: pre-wrap;
+    .assistant-avatar {
+        border-color: #e0e0e0;
+    }
+
+    .user-avatar {
+        border-color: rgb(28, 85, 227);
+    }
+
+    .message-wrapper.assistant {
+        justify-content: flex-start;
+    }
+
+    .message-wrapper.user {
+        justify-content: flex-end;
+        margin-left: auto;
+    }
+
+    .message-bubble {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        position: relative;
+        word-wrap: break-word;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-bubble.assistant {
+        background-color: white;
+        color: #333;
+        /* border-bottom-left-radius: 4px; */
+    }
+
+    .message-bubble.assistant::before {
+        content: '';
+        position: absolute;
+        left: -8px;
+        top: 16px;
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid white;
+    }
+
+    .message-bubble.user {
+        background-color: rgb(28, 85, 227);
+        color: white;
+        /* border-bottom-right-radius: 4px; */
+    }
+
+    .message-bubble.user::before {
+        content: '';
+        position: absolute;
+        right: -8px;
+        top: 16px;
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 8px solid rgb(28, 85, 227);
+    }
+
+    .message-content {
+        /* white-space: pre-wrap; */
+        line-height: 1.4;
+    }
+
+    /* Markdown 内容样式优化 */
+    .message-content p {
+        margin: 0 0 8px 0;
+    }
+
+    .message-content p:last-child {
+        margin-bottom: 0;
+    }
+
+    .message-content a {
+        color: inherit;
+        text-decoration: underline;
+    }
+
+    .message-content code {
+        background-color: rgba(0, 0, 0, 0.1);
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-size: 0.9em;
+    }
+
+    .message-content pre {
+        background-color: rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        border-radius: 6px;
+        overflow-x: auto;
+        margin: 8px 0;
+    }
+
+    .message-content pre code {
+        background-color: transparent;
+        padding: 0;
     }
 
     .typing {
@@ -86,5 +199,12 @@
     @keyframes pulse {
         0%, 100% { opacity: 0.5; }
         50% { opacity: 1; }
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .message-bubble {
+            max-width: 90%;
+        }
     }
 </style>

@@ -249,12 +249,12 @@ export function selectChatSession(id: number) {
 export async function createChatSession(name: string): Promise<number> {
     try {
         const newId = chatHistory.size > 0 ? Math.max(...chatHistory.keys()) + 1 : 0;
-        const systemPrompt = personas.get(preferences.persona)?.systemPrompt || defaultPersona.systemPrompt;
+        // const systemPrompt = personas.get(preferences.persona)?.systemPrompt || defaultPersona.systemPrompt;
         
         const newSession: ChatSession = {
             id: newId,
             name,
-            messages: [{ role: 'system', content: systemPrompt }]
+            messages: []
         };
         chatHistory.set(newId, newSession);
         await saveChatSession(newSession);

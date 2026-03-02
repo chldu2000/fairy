@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { providerApiEndpoints, ProviderType } from './constants';
-import { providers, preferences, selectedChat, saveChatSession } from './store.svelte';
+import { providers, preferences, selectedChat, saveChatSession, personas } from './store.svelte';
 
 export async function sendMessage_Test(message: string) {
     if (selectedChat.session) {
@@ -14,6 +14,11 @@ export async function sendMessage(message: string) {
     if (!browser) return;
 
     if (selectedChat.session) {
+        if (selectedChat.session.messages.length === 0) {
+            // 如果是新会话，添加系统提示
+            const systemPrompt = personas.get(preferences.persona)?.systemPrompt || '';
+            selectedChat.session.messages.push({ role: 'system', content: systemPrompt });
+        }
         // 添加用户消息
         selectedChat.session.messages.push({ role: 'user', content: message });
 

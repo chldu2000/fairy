@@ -49,12 +49,7 @@
             </a>
         {/each}
     </div>
-    
-    <div class="button-group-h-centered">
-        <KKButton preset="round">+</KKButton>
-        <KKButton preset="round" onclick={ () => jumpTo(-1) }>⚙</KKButton>
-    </div>
-
+    <KKButton onclick={ () => jumpTo(-1) }>Settings</KKButton>
 </div>
 
 <style>
@@ -123,11 +118,5 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    .button-group-h-centered {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
     }
 </style>
