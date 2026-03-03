@@ -25,6 +25,26 @@
         textarea.style.height = "auto";
         textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px";
     }
+
+    // 处理键盘事件
+    function handleKeyDown(event: KeyboardEvent) {
+        // 按下回车键、没有按下 shift 时触发提交
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            const target = event.target as HTMLTextAreaElement;
+            const message = target.value.trim();
+            target.value = "";
+            target.style.height = "auto";
+            if (!message) return;
+
+            try {
+                sendMessage(message);
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+        }
+        // shift + Enter 会触发默认的换行行为
+    }
 </script>
 
 <div id="input-layout">
@@ -34,6 +54,7 @@
             placeholder="Type your message here..."
             rows="1"
             oninput={autoResizeTextarea}
+            onkeydown={handleKeyDown}
         ></textarea>
         <KKButton id="submit-button" type="submit">Submit</KKButton>
     </form>

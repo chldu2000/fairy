@@ -96,6 +96,11 @@
         align-items: center;
     }
 
+    .chat-item:focus {
+        outline: 2px solid #9bbe00;
+        outline-offset: 2px;
+    }
+
     .chat-item :global(.auto-hide) {
         display: none; /* hide icon buttons if parent is not selected */
     }
