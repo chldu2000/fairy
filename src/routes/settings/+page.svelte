@@ -3,12 +3,12 @@
     import Providers from "./Providers.svelte";
     import Personas from "./Personas.svelte";
 
-    import { providers, personas, preferences } from "$lib/store.svelte";
+    import { providers, personas } from "$lib/store.svelte";
 
     deselectChatSession();
 
-    let activeTab: string = 'providers';
-    const tabs: string[] = ['providers', 'personas'];
+    let activeTab: string = 'Providers';
+    const tabs: string[] = ['Providers', 'Personas'];
 
     function changeTab(tab: string) {
         activeTab = tab;
@@ -29,10 +29,10 @@
         {/each}
     </div>
     <div id="tab-content">
-        {#if activeTab === 'providers'}
+        {#if activeTab === 'Providers'}
             <Providers providers={providers} />
         {/if}
-        {#if activeTab === 'personas'}
+        {#if activeTab === 'Personas'}
             <Personas personas={personas} />
         {/if}
     </div>

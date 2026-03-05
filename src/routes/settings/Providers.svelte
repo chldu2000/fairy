@@ -2,7 +2,8 @@
     import type { Provider } from '$lib/types';
     import type { SvelteMap } from 'svelte/reactivity';
     import { saveProvider, deleteProvider } from '$lib/store.svelte';
-    import { ProviderType } from '$lib/constants';
+    import { ProviderType } from '$lib/types';
+    import { providerApiEndpoints } from '$lib/constants';
 
     type Props = {
         providers: SvelteMap<string, Provider>;
@@ -17,29 +18,44 @@
     let showDeleteConfirm = $state(false);
     let providerToDelete = $state('');
 
+    // 初始化表单数据的函数
+    function initFormData(apiType: ProviderType = ProviderType.OpenAICompatible): Provider {
+        return {
+            name: '',
+            apiType,
+            baseUrl: providerApiEndpoints[apiType].baseUrl,
+            endpoint: providerApiEndpoints[apiType].endpoint,
+            apiKey: null,
+            model: ''
+        };
+    }
+
     // 表单数据
-    let formData: Provider = $state({
-        name: '',
-        apiType: ProviderType.OpenAICompatible,
-        baseUrl: '',
-        apiKey: null,
-        model: ''
-    }) as Provider;
+    let formData: Provider = $state(initFormData()) as Provider;
 
     // 验证错误
     let errors: Partial<Record<keyof Provider, string>> = $state({}) as Partial<Record<keyof Provider, string>>;
+
+    // 监听 apiType 变化，自动填充默认值
+    function handleApiTypeChange() {
+        if (formData.apiType && providerApiEndpoints[formData.apiType]) {
+            const defaults = providerApiEndpoints[formData.apiType];
+            // 仅在新增模式或 baseUrl 为空时填充
+            if (!isEditing || !formData.baseUrl) {
+                formData.baseUrl = defaults.baseUrl;
+            }
+            // 仅在新增模式或 endpoint 为空时填充
+            if (!isEditing || !formData.endpoint) {
+                formData.endpoint = defaults.endpoint;
+            }
+        }
+    }
 
     // 打开新增表单
     function openAddForm() {
         isEditing = false;
         editingName = '';
-        formData = {
-            name: '',
-            apiType: ProviderType.OpenAICompatible,
-            baseUrl: '',
-            apiKey: null,
-            model: ''
-        };
+        formData = initFormData();
         errors = {};
         isFormVisible = true;
     }
@@ -74,6 +90,10 @@
             } catch {
                 newErrors.baseUrl = '请输入有效的 URL';
             }
+        }
+
+        if (!formData.endpoint.trim()) {
+            newErrors.endpoint = 'Endpoint 不能为空';
         }
 
         if (!formData.model.trim()) {
@@ -147,7 +167,7 @@
                     <div class="provider-name">{name}</div>
                     <div class="provider-details">
                         <span>Type: {provider.apiType}</span>
-                        <span>URL: {provider.baseUrl}</span>
+                        <span>URL: {provider.baseUrl}{provider.endpoint}</span>
                         <span>Model: {provider.model}</span>
                     </div>
                 </div>
@@ -186,8 +206,8 @@
 
                 <div class="form-field">
                     <label for="apiType">API 类型 *</label>
-                    <select id="apiType" bind:value={formData.apiType}>
-                        {#each Object.values(ProviderType) as apiType}
+                    <select id="apiType" bind:value={formData.apiType} onchange={handleApiTypeChange}>
+                        {#each Object.values(ProviderType) as apiType (apiType)}
                             <option value={apiType}>{apiType}</option>
                         {/each}
                     </select>
@@ -203,6 +223,19 @@
                     />
                     {#if errors.baseUrl}
                         <span class="error">{errors.baseUrl}</span>
+                    {/if}
+                </div>
+
+                <div class="form-field">
+                    <label for="endpoint">Endpoint *</label>
+                    <input
+                        id="endpoint"
+                        type="text"
+                        bind:value={formData.endpoint}
+                        placeholder="/v1/chat/completions"
+                    />
+                    {#if errors.endpoint}
+                        <span class="error">{errors.endpoint}</span>
                     {/if}
                 </div>
 

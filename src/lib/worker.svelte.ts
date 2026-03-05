@@ -1,7 +1,9 @@
 import { browser } from '$app/environment';
-import { providerApiEndpoints, ProviderType } from './constants';
+import { ProviderType } from './types';
+import { providerApiEndpoints } from './constants';
 import { providers, preferences, selectedChat, saveChatSession, personas } from './store.svelte';
 
+// TODO: rename to OpenAI worker/adapter/client, add other provider workers as needed
 export async function sendMessage_Test(message: string) {
     if (selectedChat.session) {
         selectedChat.session.messages.push({ role: 'user', content: message });
@@ -27,11 +29,12 @@ export async function sendMessage(message: string) {
         selectedChat.session.messages.push({ role: 'assistant', content: '' });
 
         const url = '/api'; // use local API proxy
-        const targetBaseUrl = providers.get(preferences.provider)?.baseUrl || '';
-        const targetEndpoint =  providerApiEndpoints[providers.get(preferences.provider)?.apiType || ProviderType.OpenAICompatible];
+        const provider = providers.get(preferences.provider);
+        const targetBaseUrl = provider?.baseUrl || '';
+        const targetEndpoint = provider?.endpoint || providerApiEndpoints[provider?.apiType || ProviderType.OpenAICompatible].endpoint;
         const body = {
             target: `${targetBaseUrl}${targetEndpoint}`,
-            model: providers.get(preferences.provider)?.model,
+            model: provider?.model,
             messages: selectedChat.session.messages,
             temperature: 0.7,
             stream: true, // 使用流式传输
@@ -41,8 +44,8 @@ export async function sendMessage(message: string) {
             'Content-Type': 'application/json'
         };
 
-        if (providers.get(preferences.provider)?.apiKey) {
-            headers['Authorization'] = `Bearer ${providers.get(preferences.provider)?.apiKey}`;
+        if (provider?.apiKey) {
+            headers['Authorization'] = `Bearer ${provider.apiKey}`;
         }
 
         try {

@@ -1,9 +1,12 @@
-import type { ProviderType } from "./constants";
+export enum ProviderType {
+    OpenAICompatible = 'openai-compatible'
+}
 
 export type Provider = {
     name: string;
     apiType: ProviderType;
     baseUrl: string;
+    endpoint: string;
     apiKey: string | null;
     model: string;
 }
