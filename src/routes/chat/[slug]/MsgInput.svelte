@@ -28,8 +28,8 @@
 
     // 处理键盘事件
     function handleKeyDown(event: KeyboardEvent) {
-        // 按下回车键、没有按下 shift 时触发提交
-        if (event.key === "Enter" && !event.shiftKey) {
+        // 按下回车键、没有按下 shift 且不处于输入法选词阶段时触发提交
+        if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
             event.preventDefault();
             const target = event.target as HTMLTextAreaElement;
             const message = target.value.trim();
