@@ -1,12 +1,13 @@
 <script lang='ts'>
+    import type { Message } from '$lib/types';
     import { marked } from 'marked';
 
-    export let message: any;
+    export let message: Message;
 </script>
 
 <div class={`message-wrapper ${message.role}`}>
     {#if message.role === 'assistant'}
-        <div class={`avatar assistant-avatar`}>🧿</div>
+        <div class="avatar assistant-avatar">🧿</div>
     {/if}
     <div class={`message-bubble ${message.role} ${message.content.trim().length > 0 ? 'has-content' : 'no-content'}`}>
         <div class="message-content">{@html marked(message.content)}</div>
@@ -122,28 +123,31 @@
         line-height: 1.4;
     }
 
-    /* Markdown 内容样式优化 */
-    .message-content p {
+    /*
+     * Markdown 内容样式优化
+     * :global() https://svelte.dev/docs/svelte/@html
+     */
+    .message-content :global(p) {
         margin: 0 0 8px 0;
     }
 
-    .message-content p:last-child {
+    .message-content :global(p:last-child) {
         margin-bottom: 0;
     }
 
-    .message-content a {
+    .message-content :global(a) {
         color: inherit;
         text-decoration: underline;
     }
 
-    .message-content code {
+    .message-content :global(code) {
         background-color: rgba(0, 0, 0, 0.1);
         padding: 2px 4px;
         border-radius: 3px;
         font-size: 0.9em;
     }
 
-    .message-content pre {
+    .message-content :global(pre) {
         background-color: rgba(0, 0, 0, 0.1);
         padding: 8px;
         border-radius: 6px;
@@ -151,7 +155,7 @@
         margin: 8px 0;
     }
 
-    .message-content pre code {
+    .message-content :global(pre code) {
         background-color: transparent;
         padding: 0;
     }
