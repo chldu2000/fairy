@@ -1,35 +1,33 @@
 <script lang="ts">
-    import { deselectChatSession } from '$lib/store.svelte';
-	
-	deselectChatSession();
+    import { deselectChatSession } from "$lib/store.svelte";
+
+    deselectChatSession();
 </script>
 
 <svelte:head>
-	<title>Fairy</title>
-	<meta name="description" content="A chatbot demo" />
+    <title>Fairy</title>
+    <meta name="description" content="A chatbot demo" />
 </svelte:head>
 
 <section>
-	<h1>
-		Talk with Fairy~
-	</h1>
+    <h1>Talk with Fairy~</h1>
 
-	<p>Set up your API, and...</p>
+    <p>Set up your API, and...</p>
 
-	<p>Start by create/select a chat from the sidebar~</p>
+    <p>Start by create/select a chat from the sidebar~</p>
 </section>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 1;
-	}
+    section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
 
-	h1 {
-		width: 100%;
-		text-align: center;
-	}
+    h1 {
+        width: 100%;
+        text-align: center;
+    }
 </style>

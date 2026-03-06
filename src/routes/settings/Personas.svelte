@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { Persona } from '$lib/types';
-    import type { SvelteMap } from 'svelte/reactivity';
-    import { savePersona, deletePersona } from '$lib/store.svelte';
+    import type { Persona } from "$lib/types";
+    import type { SvelteMap } from "svelte/reactivity";
+    import { savePersona, deletePersona } from "$lib/store.svelte";
 
     type Props = {
         personas: SvelteMap<string, Persona>;
@@ -12,30 +12,32 @@
     // 状态管理
     let isFormVisible = $state(false);
     let isEditing = $state(false);
-    let editingName = ''; // 用于编辑时存储原始名称
+    let editingName = ""; // 用于编辑时存储原始名称
     let showDeleteConfirm = $state(false);
-    let personaToDelete = $state('');
+    let personaToDelete = $state("");
 
     // 表单数据
     let formData: Persona = $state({
-        name: '',
-        description: '',
-        systemPrompt: '',
-        icon: ''
+        name: "",
+        description: "",
+        systemPrompt: "",
+        icon: "",
     }) as Persona;
 
     // 验证错误
-    let errors: Partial<Record<keyof Persona, string>> = $state({}) as Partial<Record<keyof Persona, string>>;
+    let errors: Partial<Record<keyof Persona, string>> = $state({}) as Partial<
+        Record<keyof Persona, string>
+    >;
 
     // 打开新增表单
     function openAddForm() {
         isEditing = false;
-        editingName = '';
+        editingName = "";
         formData = {
-            name: '',
-            description: '',
-            systemPrompt: '',
-            icon: ''
+            name: "",
+            description: "",
+            systemPrompt: "",
+            icon: "",
         };
         errors = {};
         isFormVisible = true;
@@ -58,17 +60,20 @@
         const newErrors: Partial<Record<keyof Persona, string>> = {};
 
         if (!formData.name.trim()) {
-            newErrors.name = '名称不能为空';
-        } else if ((!isEditing || formData.name !== editingName) && personas.has(formData.name)) {
-            newErrors.name = 'Persona 名称已存在';
+            newErrors.name = "名称不能为空";
+        } else if (
+            (!isEditing || formData.name !== editingName) &&
+            personas.has(formData.name)
+        ) {
+            newErrors.name = "Persona 名称已存在";
         }
 
         if (!formData.description.trim()) {
-            newErrors.description = '描述不能为空';
+            newErrors.description = "描述不能为空";
         }
 
         if (!formData.systemPrompt.trim()) {
-            newErrors.systemPrompt = '系统提示词不能为空';
+            newErrors.systemPrompt = "系统提示词不能为空";
         }
 
         errors = newErrors;
@@ -86,8 +91,8 @@
                     await deletePersona(editingName);
                 }
             } catch (error) {
-                console.error('Error saving persona:', error);
-                alert('保存失败，请重试');
+                console.error("Error saving persona:", error);
+                alert("保存失败，请重试");
             }
         }
     }
@@ -106,7 +111,7 @@
     // 取消删除
     function cancelDelete() {
         showDeleteConfirm = false;
-        personaToDelete = '';
+        personaToDelete = "";
     }
 
     // 确认删除
@@ -114,10 +119,10 @@
         try {
             await deletePersona(personaToDelete);
             showDeleteConfirm = false;
-            personaToDelete = '';
+            personaToDelete = "";
         } catch (error) {
-            console.error('Error deleting persona:', error);
-            alert('删除失败，请重试');
+            console.error("Error deleting persona:", error);
+            alert("删除失败，请重试");
         }
     }
 </script>
@@ -125,9 +130,7 @@
 <div class="personas-container">
     <!-- 操作栏 -->
     <div class="action-bar">
-        <button class="add-button" onclick={openAddForm}>
-            新增 Persona
-        </button>
+        <button class="add-button" onclick={openAddForm}> 新增 Persona </button>
     </div>
 
     <!-- Persona 列表 -->
@@ -146,10 +149,16 @@
                     </div>
                 </div>
                 <div class="persona-actions">
-                    <button class="edit-button" onclick={() => openEditForm(name)}>
+                    <button
+                        class="edit-button"
+                        onclick={() => openEditForm(name)}
+                    >
                         编辑
                     </button>
-                    <button class="delete-button" onclick={() => openDeleteConfirm(name)}>
+                    <button
+                        class="delete-button"
+                        onclick={() => openDeleteConfirm(name)}
+                    >
                         删除
                     </button>
                 </div>
@@ -159,12 +168,22 @@
 
     <!-- 表单区域 -->
     {#if isFormVisible}
-        <div class="form-overlay" onclick={handleCancel} aria-hidden="true" ></div>
+        <div
+            class="form-overlay"
+            onclick={handleCancel}
+            aria-hidden="true"
+        ></div>
         <div class="form-container">
             <div class="form-header">
-                <h2>{isEditing ? '编辑 Persona' : '新增 Persona'}</h2>
+                <h2>{isEditing ? "编辑 Persona" : "新增 Persona"}</h2>
             </div>
-            <form class="persona-form" onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+            <form
+                class="persona-form"
+                onsubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                }}
+            >
                 <div class="form-field">
                     <label for="name">名称 *</label>
                     <input
@@ -215,10 +234,12 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="submit-button">
-                        保存
-                    </button>
-                    <button type="button" class="cancel-button" onclick={handleCancel}>
+                    <button type="submit" class="submit-button"> 保存 </button>
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        onclick={handleCancel}
+                    >
                         取消
                     </button>
                 </div>
@@ -228,7 +249,11 @@
 
     <!-- 删除确认对话框 -->
     {#if showDeleteConfirm}
-        <div class="form-overlay" onclick={cancelDelete} aria-hidden="true" ></div>
+        <div
+            class="form-overlay"
+            onclick={cancelDelete}
+            aria-hidden="true"
+        ></div>
         <div class="confirm-dialog">
             <div class="confirm-header">
                 <h3>确认删除</h3>
@@ -314,7 +339,8 @@
         gap: 0.5rem;
     }
 
-    .edit-button, .delete-button {
+    .edit-button,
+    .delete-button {
         padding: 0.25rem 0.75rem;
         border: 1px solid #ddd;
         border-radius: 4px;
@@ -412,7 +438,8 @@
         margin-top: 1rem;
     }
 
-    .submit-button, .cancel-button {
+    .submit-button,
+    .cancel-button {
         padding: 0.5rem 1rem;
         border-radius: 4px;
         cursor: pointer;

@@ -7,14 +7,13 @@
 
     deselectChatSession();
 
-    let activeTab: string = 'Providers';
-    const tabs: string[] = ['Providers', 'Personas'];
+    let activeTab: string = "Providers";
+    const tabs: string[] = ["Providers", "Personas"];
 
     function changeTab(tab: string) {
         activeTab = tab;
     }
 </script>
-
 
 <div id="settings-layout">
     <!-- <div>
@@ -23,24 +22,26 @@
 
     <div class="tabs-bar">
         {#each tabs as tab (tab)}
-            <button onclick={() => changeTab(tab)} class="tab {activeTab === tab ? 'active' : ''}">
+            <button
+                onclick={() => changeTab(tab)}
+                class="tab {activeTab === tab ? 'active' : ''}"
+            >
                 <span>{tab}</span>
             </button>
         {/each}
     </div>
     <div id="tab-content">
-        {#if activeTab === 'Providers'}
-            <Providers providers={providers} />
+        {#if activeTab === "Providers"}
+            <Providers {providers} />
         {/if}
-        {#if activeTab === 'Personas'}
-            <Personas personas={personas} />
+        {#if activeTab === "Personas"}
+            <Personas {personas} />
         {/if}
     </div>
 </div>
 
-
 <style>
-    @import '$lib/style/animation.css';
+    @import "$lib/style/animation.css";
 
     #settings-layout {
         flex: 1;

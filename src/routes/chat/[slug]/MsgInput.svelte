@@ -5,7 +5,7 @@
     function handleSubmit(event: Event) {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
-        const textarea = form.querySelector('textarea') as HTMLTextAreaElement;
+        const textarea = form.querySelector("textarea") as HTMLTextAreaElement;
         const message = textarea.value.trim();
         textarea.value = "";
         // 重置 textarea 高度

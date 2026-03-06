@@ -4,18 +4,22 @@
 
     // filter out system messages
     const messages = $derived(
-        Array.from(selectedChat.session?.messages || []).filter(message => message.role !== 'system')
-    )
+        Array.from(selectedChat.session?.messages || []).filter(
+            (message) => message.role !== "system",
+        ),
+    );
 
     // waiting for assistant response
     const isWaiting = $derived(() => {
-        return messages.length > 0 &&
-               messages[messages.length - 1].role === 'assistant' &&
-               messages[messages.length - 1].content === '';
+        return (
+            messages.length > 0 &&
+            messages[messages.length - 1].role === "assistant" &&
+            messages[messages.length - 1].content === ""
+        );
     });
 
     let messagesContainer: HTMLDivElement;
-    let lastMessageContent = '';
+    let lastMessageContent = "";
     let lastMessageCount = 0;
 
     // 监听 messages 变化，滚动到最下面
@@ -23,24 +27,26 @@
         const shouldScroll = () => {
             if (messages.length === 0 || !messagesContainer) {
                 lastMessageCount = 0;
-                lastMessageContent = '';
+                lastMessageContent = "";
                 return false;
             }
 
             const lastMessage = messages[messages.length - 1];
             const hasMessageCountChanged = messages.length !== lastMessageCount;
-            const hasLastMessageContentChanged = lastMessage && lastMessage.content !== lastMessageContent;
+            const hasLastMessageContentChanged =
+                lastMessage && lastMessage.content !== lastMessageContent;
 
             return hasMessageCountChanged || hasLastMessageContentChanged;
         };
 
         if (shouldScroll()) {
             lastMessageCount = messages.length;
-            lastMessageContent = messages[messages.length - 1]?.content ?? '';
+            lastMessageContent = messages[messages.length - 1]?.content ?? "";
 
             requestAnimationFrame(() => {
                 if (messagesContainer) {
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    messagesContainer.scrollTop =
+                        messagesContainer.scrollHeight;
                 }
             });
         }
@@ -89,7 +95,12 @@
     }
 
     @keyframes pulse {
-        0%, 100% { opacity: 0.5; }
-        50% { opacity: 1; }
+        0%,
+        100% {
+            opacity: 0.5;
+        }
+        50% {
+            opacity: 1;
+        }
     }
 </style>

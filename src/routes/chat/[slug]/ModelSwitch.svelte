@@ -1,15 +1,20 @@
 <script lang="ts">
-    import { preferences, savePreference, providers, personas } from "$lib/store.svelte";
+    import {
+        preferences,
+        savePreference,
+        providers,
+        personas,
+    } from "$lib/store.svelte";
 
-    function handleModelChange(event: Event, level: 'provider' | 'persona') {
+    function handleModelChange(event: Event, level: "provider" | "persona") {
         const selectElement = event.target as HTMLOptionElement;
         // console.log(`Changing ${level} to: ${selectElement.value}`);
-        if (level === 'provider') {
+        if (level === "provider") {
             preferences.provider = selectElement.value;
-            savePreference('provider', selectElement.value);
+            savePreference("provider", selectElement.value);
         } else {
             preferences.persona = selectElement.value;
-            savePreference('persona', selectElement.value);
+            savePreference("persona", selectElement.value);
         }
         console.log(`Selected ${level} changed to: ${preferences[level]}`);
     }
@@ -20,7 +25,7 @@
         <span>Provider:</span>
         <select
             bind:value={preferences.provider}
-            onchange={(e) => handleModelChange(e, 'provider')}
+            onchange={(e) => handleModelChange(e, "provider")}
         >
             {#each Array.from(providers.keys()) as key (key)}
                 <option value={key}>{key}</option>
@@ -31,7 +36,7 @@
         <span>Persona:</span>
         <select
             bind:value={preferences.persona}
-            onchange={(e) => handleModelChange(e, 'persona')}
+            onchange={(e) => handleModelChange(e, "persona")}
         >
             {#each Array.from(personas.keys()) as key (key)}
                 <option value={key}>{key}</option>
@@ -49,7 +54,8 @@
         flex-direction: row;
     }
 
-    #provider-select, #persona-select {
+    #provider-select,
+    #persona-select {
         margin: 0 1rem;
     }
 </style>

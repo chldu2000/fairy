@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { Provider } from '$lib/types';
-    import type { SvelteMap } from 'svelte/reactivity';
-    import { saveProvider, deleteProvider } from '$lib/store.svelte';
-    import { ProviderType } from '$lib/types';
-    import { providerApiEndpoints } from '$lib/constants';
+    import type { Provider } from "$lib/types";
+    import type { SvelteMap } from "svelte/reactivity";
+    import { saveProvider, deleteProvider } from "$lib/store.svelte";
+    import { ProviderType } from "$lib/types";
+    import { providerApiEndpoints } from "$lib/constants";
 
     type Props = {
         providers: SvelteMap<string, Provider>;
@@ -14,19 +14,21 @@
     // 状态管理
     let isFormVisible = $state(false);
     let isEditing = $state(false);
-    let editingName = ''; // 用于编辑时存储原始名称
+    let editingName = ""; // 用于编辑时存储原始名称
     let showDeleteConfirm = $state(false);
-    let providerToDelete = $state('');
+    let providerToDelete = $state("");
 
     // 初始化表单数据的函数
-    function initFormData(apiType: ProviderType = ProviderType.OpenAICompatible): Provider {
+    function initFormData(
+        apiType: ProviderType = ProviderType.OpenAICompatible,
+    ): Provider {
         return {
-            name: '',
+            name: "",
             apiType,
             baseUrl: providerApiEndpoints[apiType].baseUrl,
             endpoint: providerApiEndpoints[apiType].endpoint,
             apiKey: null,
-            model: ''
+            model: "",
         };
     }
 
@@ -34,7 +36,9 @@
     let formData: Provider = $state(initFormData()) as Provider;
 
     // 验证错误
-    let errors: Partial<Record<keyof Provider, string>> = $state({}) as Partial<Record<keyof Provider, string>>;
+    let errors: Partial<Record<keyof Provider, string>> = $state({}) as Partial<
+        Record<keyof Provider, string>
+    >;
 
     // 监听 apiType 变化，自动填充默认值
     function handleApiTypeChange() {
@@ -54,7 +58,7 @@
     // 打开新增表单
     function openAddForm() {
         isEditing = false;
-        editingName = '';
+        editingName = "";
         formData = initFormData();
         errors = {};
         isFormVisible = true;
@@ -77,27 +81,30 @@
         const newErrors: Partial<Record<keyof Provider, string>> = {};
 
         if (!formData.name.trim()) {
-            newErrors.name = '名称不能为空';
-        } else if ((!isEditing || formData.name !== editingName) && providers.has(formData.name)) {
-            newErrors.name = 'Provider 名称已存在';
+            newErrors.name = "名称不能为空";
+        } else if (
+            (!isEditing || formData.name !== editingName) &&
+            providers.has(formData.name)
+        ) {
+            newErrors.name = "Provider 名称已存在";
         }
 
         if (!formData.baseUrl.trim()) {
-            newErrors.baseUrl = 'Base URL 不能为空';
+            newErrors.baseUrl = "Base URL 不能为空";
         } else {
             try {
                 new URL(formData.baseUrl);
             } catch {
-                newErrors.baseUrl = '请输入有效的 URL';
+                newErrors.baseUrl = "请输入有效的 URL";
             }
         }
 
         if (!formData.endpoint.trim()) {
-            newErrors.endpoint = 'Endpoint 不能为空';
+            newErrors.endpoint = "Endpoint 不能为空";
         }
 
         if (!formData.model.trim()) {
-            newErrors.model = 'Model 不能为空';
+            newErrors.model = "Model 不能为空";
         }
 
         errors = newErrors;
@@ -115,8 +122,8 @@
                     await deleteProvider(editingName);
                 }
             } catch (error) {
-                console.error('Error saving provider:', error);
-                alert('保存失败，请重试');
+                console.error("Error saving provider:", error);
+                alert("保存失败，请重试");
             }
         }
     }
@@ -135,7 +142,7 @@
     // 取消删除
     function cancelDelete() {
         showDeleteConfirm = false;
-        providerToDelete = '';
+        providerToDelete = "";
     }
 
     // 确认删除
@@ -143,10 +150,10 @@
         try {
             await deleteProvider(providerToDelete);
             showDeleteConfirm = false;
-            providerToDelete = '';
+            providerToDelete = "";
         } catch (error) {
-            console.error('Error deleting provider:', error);
-            alert('删除失败，请重试');
+            console.error("Error deleting provider:", error);
+            alert("删除失败，请重试");
         }
     }
 </script>
@@ -172,10 +179,16 @@
                     </div>
                 </div>
                 <div class="provider-actions">
-                    <button class="edit-button" onclick={() => openEditForm(name)}>
+                    <button
+                        class="edit-button"
+                        onclick={() => openEditForm(name)}
+                    >
                         编辑
                     </button>
-                    <button class="delete-button" onclick={() => openDeleteConfirm(name)}>
+                    <button
+                        class="delete-button"
+                        onclick={() => openDeleteConfirm(name)}
+                    >
                         删除
                     </button>
                 </div>
@@ -185,12 +198,22 @@
 
     <!-- 表单区域 -->
     {#if isFormVisible}
-        <div class="form-overlay" onclick={handleCancel} aria-hidden="true" ></div>
+        <div
+            class="form-overlay"
+            onclick={handleCancel}
+            aria-hidden="true"
+        ></div>
         <div class="form-container">
             <div class="form-header">
-                <h2>{isEditing ? '编辑 Provider' : '新增 Provider'}</h2>
+                <h2>{isEditing ? "编辑 Provider" : "新增 Provider"}</h2>
             </div>
-            <form class="provider-form" onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+            <form
+                class="provider-form"
+                onsubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                }}
+            >
                 <div class="form-field">
                     <label for="name">名称 *</label>
                     <input
@@ -206,7 +229,11 @@
 
                 <div class="form-field">
                     <label for="apiType">API 类型 *</label>
-                    <select id="apiType" bind:value={formData.apiType} onchange={handleApiTypeChange}>
+                    <select
+                        id="apiType"
+                        bind:value={formData.apiType}
+                        onchange={handleApiTypeChange}
+                    >
                         {#each Object.values(ProviderType) as apiType (apiType)}
                             <option value={apiType}>{apiType}</option>
                         {/each}
@@ -263,10 +290,12 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="submit-button">
-                        保存
-                    </button>
-                    <button type="button" class="cancel-button" onclick={handleCancel}>
+                    <button type="submit" class="submit-button"> 保存 </button>
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        onclick={handleCancel}
+                    >
                         取消
                     </button>
                 </div>
@@ -276,7 +305,11 @@
 
     <!-- 删除确认对话框 -->
     {#if showDeleteConfirm}
-        <div class="form-overlay" onclick={cancelDelete} aria-hidden="true" ></div>
+        <div
+            class="form-overlay"
+            onclick={cancelDelete}
+            aria-hidden="true"
+        ></div>
         <div class="confirm-dialog">
             <div class="confirm-header">
                 <h3>确认删除</h3>
@@ -359,7 +392,8 @@
         gap: 0.5rem;
     }
 
-    .edit-button, .delete-button {
+    .edit-button,
+    .delete-button {
         padding: 0.25rem 0.75rem;
         border: 1px solid #ddd;
         border-radius: 4px;
@@ -452,7 +486,8 @@
         margin-top: 1rem;
     }
 
-    .submit-button, .cancel-button {
+    .submit-button,
+    .cancel-button {
         padding: 0.5rem 1rem;
         border-radius: 4px;
         cursor: pointer;

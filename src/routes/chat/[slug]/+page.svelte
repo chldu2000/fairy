@@ -18,8 +18,10 @@
                 console.log(`Selecting chat session: ${sessionId}`);
                 selectChatSession(sessionId);
             } else {
-                console.warn(`Chat session not found: ${sessionId}, redirecting to home.`);
-                goto('/');
+                console.warn(
+                    `Chat session not found: ${sessionId}, redirecting to home.`,
+                );
+                goto("/");
             }
         }
     });
@@ -29,7 +31,6 @@
     <div id="model-switch-area">
         <ModelSwitch />
     </div>
-    
 
     <div>chat slug : {slug}</div>
     <div id="msg-display-area">
@@ -38,8 +39,6 @@
     <div id="msg-input-area">
         <MsgInput />
     </div>
-    
-    
 </div>
 
 <style>
@@ -53,7 +52,7 @@
 
     #model-switch-area {
         display: flex;
-        flex : 0 0 auto;
+        flex: 0 0 auto;
     }
 
     #msg-display-area {

@@ -1,18 +1,20 @@
-<script lang='ts'>
-    import type { Message } from '$lib/types';
-    import { marked } from 'marked';
+<script lang="ts">
+    import type { Message } from "$lib/types";
+    import { marked } from "marked";
 
     export let message: Message;
 </script>
 
 <div class={`message-wrapper ${message.role}`}>
-    {#if message.role === 'assistant'}
+    {#if message.role === "assistant"}
         <div class="avatar assistant-avatar">🧿</div>
     {/if}
-    <div class={`message-bubble ${message.role} ${message.content.trim().length > 0 ? 'has-content' : 'no-content'}`}>
+    <div
+        class={`message-bubble ${message.role} ${message.content.trim().length > 0 ? "has-content" : "no-content"}`}
+    >
         <div class="message-content">{@html marked(message.content)}</div>
     </div>
-    {#if message.role === 'user'}
+    {#if message.role === "user"}
         <div class="avatar user-avatar">👤</div>
     {/if}
 </div>
@@ -79,7 +81,7 @@
     }
 
     .message-bubble.assistant.has-content::before {
-        content: '';
+        content: "";
         position: absolute;
         left: -8px;
         top: 16px;
@@ -96,7 +98,7 @@
     }
 
     .message-bubble.user.has-content::before {
-        content: '';
+        content: "";
         position: absolute;
         right: -8px;
         top: 16px;

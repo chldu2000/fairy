@@ -2,29 +2,34 @@
     import { goto } from "$app/navigation";
     import { scale } from "svelte/transition";
     import KKButton from "$lib/widgets/KKButton.svelte";
-    import { chatHistory, selectedChat, createChatSession, deleteChatSession } from "$lib/store.svelte";
+    import {
+        chatHistory,
+        selectedChat,
+        createChatSession,
+        deleteChatSession,
+    } from "$lib/store.svelte";
 
     const chatEntries = $derived(
         Array.from(chatHistory.entries())
             .map(([id, session]) => ({
                 id,
-                name: session.name
+                name: session.name,
             }))
-            .reverse()
+            .reverse(),
     );
 
     async function jumpTo(target: number) {
         if (target === -1) {
             // window.location.href = resolve('/settings');
             // selectChat(-1);
-            goto('/settings');
+            goto("/settings");
         } else if (target >= 0) {
             // selectedChatId.set(target);
-            const newChatId = await createChatSession('Unnamed Chat');
+            const newChatId = await createChatSession("Unnamed Chat");
             console.log(`Created chat: ${newChatId}`);
             goto(`/chat/${newChatId}`);
         } else {
-            console.error('Invalid target for onclick:', target);
+            console.error("Invalid target for onclick:", target);
         }
     }
 
@@ -37,28 +42,36 @@
         console.log(`Deleting chat: ${id}`);
         deleteChatSession(id);
         if (isCurrentChat) {
-            goto('/');
+            goto("/");
         }
     }
 </script>
 
 <div class="sidebar">
-    <KKButton onclick={ () => jumpTo(0) }>
-        New Chat
-    </KKButton>
+    <KKButton onclick={() => jumpTo(0)}>New Chat</KKButton>
     <div class="chat-list">
         {#each chatEntries as chat (chat.id)}
-            <a href={`/chat/${chat.id}`} class="chat-item {selectedChat.id === chat.id ? "selected" : ""}" transition:scale>
+            <a
+                href={`/chat/${chat.id}`}
+                class="chat-item {selectedChat.id === chat.id
+                    ? 'selected'
+                    : ''}"
+                transition:scale
+            >
                 <span class="chat-name">{chat.name}</span>
-                <KKButton preset="plain" class="auto-hide" onclick={ (e) => handleDeleteChat(e, chat.id) }>✕</KKButton>
+                <KKButton
+                    preset="plain"
+                    class="auto-hide"
+                    onclick={(e) => handleDeleteChat(e, chat.id)}>✕</KKButton
+                >
             </a>
         {/each}
     </div>
-    <KKButton onclick={ () => jumpTo(-1) }>Settings</KKButton>
+    <KKButton onclick={() => jumpTo(-1)}>Settings</KKButton>
 </div>
 
 <style>
-    @import '$lib/style/animation.css';
+    @import "$lib/style/animation.css";
 
     .sidebar {
         width: 20rem;
@@ -87,7 +100,7 @@
         border-radius: 1rem;
         padding: 0 1rem;
         margin: 0.5rem;
-        flex-shrink: 0;;
+        flex-shrink: 0;
 
         text-decoration: none;
         text-align: left;
