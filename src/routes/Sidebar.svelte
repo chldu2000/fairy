@@ -4,7 +4,7 @@
     import KKButton from "$lib/widgets/KKButton.svelte";
     import { chatHistory, selectedChat, createChatSession, deleteChatSession } from "$lib/store.svelte";
 
-    const chatListItems = $derived(
+    const chatEntries = $derived(
         Array.from(chatHistory.entries())
             .map(([id, session]) => ({
                 id,
@@ -47,7 +47,7 @@
         New Chat
     </KKButton>
     <div class="chat-list">
-        {#each chatListItems as chat (chat.id)}
+        {#each chatEntries as chat (chat.id)}
             <a href={`/chat/${chat.id}`} class="chat-item {selectedChat.id === chat.id ? "selected" : ""}" transition:scale>
                 <span class="chat-name">{chat.name}</span>
                 <KKButton preset="plain" class="auto-hide" onclick={ (e) => handleDeleteChat(e, chat.id) }>✕</KKButton>

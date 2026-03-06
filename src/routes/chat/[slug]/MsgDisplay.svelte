@@ -20,8 +20,6 @@
 
     // 监听 messages 变化，滚动到最下面
     $effect(() => {
-        console.log(messages.length, lastMessageCount)
-
         const shouldScroll = () => {
             if (messages.length === 0 || !messagesContainer) {
                 lastMessageCount = 0;

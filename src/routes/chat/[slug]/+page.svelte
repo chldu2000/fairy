@@ -47,7 +47,8 @@
         display: flex;
         flex-direction: column;
         flex: 1;
-        margin: 0.75rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
     }
 
     #model-switch-area {

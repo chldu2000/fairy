@@ -15,8 +15,8 @@
     }
 </script>
 
-<div class="model-switch">
-    <div class="provider-select">
+<div id="model-switch">
+    <div id="provider-select">
         <span>Provider:</span>
         <select
             bind:value={preferences.provider}
@@ -27,7 +27,7 @@
             {/each}
         </select>
     </div>
-    <div class="persona-select">
+    <div id="persona-select">
         <span>Persona:</span>
         <select
             bind:value={preferences.persona}
@@ -41,7 +41,7 @@
 </div>
 
 <style>
-    .model-switch {
+    #model-switch {
         background-color: #f0f0f0;
         color: black;
         display: flex;
@@ -49,7 +49,7 @@
         flex-direction: row;
     }
 
-    .provider-select, .persona-select {
+    #provider-select, #persona-select {
         margin: 0 1rem;
     }
 </style>
