@@ -32,8 +32,13 @@
         event.preventDefault();
         event.stopPropagation();
 
+        const isCurrentChat = selectedChat.id === id;
+
         console.log(`Deleting chat: ${id}`);
         deleteChatSession(id);
+        if (isCurrentChat) {
+            goto('/');
+        }
     }
 </script>
 

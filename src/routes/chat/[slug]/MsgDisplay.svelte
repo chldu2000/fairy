@@ -7,21 +7,55 @@
         Array.from(selectedChat.session?.messages || []).filter(message => message.role !== 'system')
     )
 
-    // is assistant currently 'typing'
-    const isTyping = $derived(() => {
+    // waiting for assistant response
+    const isWaiting = $derived(() => {
         return messages.length > 0 &&
                messages[messages.length - 1].role === 'assistant' &&
                messages[messages.length - 1].content === '';
+    });
+
+    let messagesContainer: HTMLDivElement;
+    let lastMessageContent = '';
+    let lastMessageCount = 0;
+
+    // 监听 messages 变化，滚动到最下面
+    $effect(() => {
+        console.log(messages.length, lastMessageCount)
+
+        const shouldScroll = () => {
+            if (messages.length === 0 || !messagesContainer) {
+                lastMessageCount = 0;
+                lastMessageContent = '';
+                return false;
+            }
+
+            const lastMessage = messages[messages.length - 1];
+            const hasMessageCountChanged = messages.length !== lastMessageCount;
+            const hasLastMessageContentChanged = lastMessage && lastMessage.content !== lastMessageContent;
+
+            return hasMessageCountChanged || hasLastMessageContentChanged;
+        };
+
+        if (shouldScroll()) {
+            lastMessageCount = messages.length;
+            lastMessageContent = messages[messages.length - 1]?.content ?? '';
+
+            requestAnimationFrame(() => {
+                if (messagesContainer) {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            });
+        }
     });
 </script>
 
 <div id="msg-display-layout">
     <!-- Here will be the message display area. -->
-    <div id="messages-container">
-        {#each messages as message, _}
+    <div id="messages-container" bind:this={messagesContainer}>
+        {#each messages as message, index (index)}
             <MsgItem {message} />
         {/each}
-        {#if isTyping()}
+        {#if isWaiting()}
             <div class="message assistant typing">
                 <span class="role">assistant:</span>
                 <span class="content">

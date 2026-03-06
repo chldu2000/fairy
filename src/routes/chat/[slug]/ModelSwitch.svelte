@@ -22,7 +22,7 @@
             bind:value={preferences.provider}
             onchange={(e) => handleModelChange(e, 'provider')}
         >
-            {#each Array.from(providers.keys()) as key}
+            {#each Array.from(providers.keys()) as key (key)}
                 <option value={key}>{key}</option>
             {/each}
         </select>
@@ -33,7 +33,7 @@
             bind:value={preferences.persona}
             onchange={(e) => handleModelChange(e, 'persona')}
         >
-            {#each Array.from(personas.keys()) as key}
+            {#each Array.from(personas.keys()) as key (key)}
                 <option value={key}>{key}</option>
             {/each}
         </select>
