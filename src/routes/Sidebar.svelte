@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-    import { resolve } from "$app/paths";
-    import { scale } from "svelte/transition";
-    import KKButton from "$lib/widgets/KKButton.svelte";
+    import { goto } from '$app/navigation';
+    import { resolve } from '$app/paths';
+    import { scale } from 'svelte/transition';
+    import KKButton from '$lib/widgets/KKButton.svelte';
     import {
         chatHistory,
         selectedChat,
         createChatSession,
         deleteChatSession,
-    } from "$lib/store.svelte";
+    } from '$lib/store.svelte';
 
     const chatEntries = $derived(
         Array.from(chatHistory.entries())
@@ -23,14 +23,14 @@
         if (target === -1) {
             // window.location.href = resolve('/settings');
             // selectChat(-1);
-            goto(resolve("/settings"));
+            goto(resolve('/settings'));
         } else if (target >= 0) {
             // selectedChatId.set(target);
-            const newChatId = await createChatSession("Unnamed Chat");
+            const newChatId = await createChatSession('Unnamed Chat');
             console.log(`Created chat: ${newChatId}`);
             goto(resolve(`/chat/${newChatId}`));
         } else {
-            console.error("Invalid target for onclick:", target);
+            console.error('Invalid target for onclick:', target);
         }
     }
 
@@ -43,7 +43,7 @@
         console.log(`Deleting chat: ${id}`);
         deleteChatSession(id);
         if (isCurrentChat) {
-            goto(resolve("/"));
+            goto(resolve('/'));
         }
     }
 </script>
@@ -72,7 +72,7 @@
 </div>
 
 <style>
-    @import "$lib/style/animation.css";
+    @import '$lib/style/animation.css';
 
     .sidebar {
         width: 20rem;

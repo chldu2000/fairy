@@ -1,17 +1,17 @@
 <script lang="ts">
-    import type { Snippet } from "svelte";
-    import type { HTMLButtonAttributes } from "svelte/elements";
+    import type { Snippet } from 'svelte';
+    import type { HTMLButtonAttributes } from 'svelte/elements';
 
     // Define the component's props interface
     interface Props extends HTMLButtonAttributes {
-        preset?: "round" | "plain" | "";
+        preset?: 'round' | 'plain' | '';
         children?: Snippet;
     }
 
     // Extract class from props, rest will be in $restProps
     let {
-        preset: shape = "",
-        class: className = "",
+        preset: shape = '',
+        class: className = '',
         children,
         ...restProps
     }: Props = $props();
@@ -22,5 +22,5 @@
 </button>
 
 <style>
-    @import "$lib/style/button.css";
+    @import '$lib/style/button.css';
 </style>

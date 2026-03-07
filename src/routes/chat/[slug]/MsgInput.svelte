@@ -1,46 +1,46 @@
 <script lang="ts">
-    import KKButton from "$lib/widgets/KKButton.svelte";
-    import { sendMessage } from "$lib/worker.svelte";
+    import KKButton from '$lib/widgets/KKButton.svelte';
+    import { sendMessage } from '$lib/worker.svelte';
 
     function handleSubmit(event: Event) {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
-        const textarea = form.querySelector("textarea") as HTMLTextAreaElement;
+        const textarea = form.querySelector('textarea') as HTMLTextAreaElement;
         const message = textarea.value.trim();
-        textarea.value = "";
+        textarea.value = '';
         // 重置 textarea 高度
-        textarea.style.height = "auto";
+        textarea.style.height = 'auto';
         if (!message) return;
 
         try {
             sendMessage(message);
         } catch (error) {
-            console.error("Error sending message:", error);
+            console.error('Error sending message:', error);
         }
     }
 
     // 自动调整 textarea 高度
     function autoResizeTextarea(event: Event) {
         const textarea = event.target as HTMLTextAreaElement;
-        textarea.style.height = "auto";
-        textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px";
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
     }
 
     // 处理键盘事件
     function handleKeyDown(event: KeyboardEvent) {
         // 按下回车键、没有按下 shift 且不处于输入法选词阶段时触发提交
-        if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+        if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
             event.preventDefault();
             const target = event.target as HTMLTextAreaElement;
             const message = target.value.trim();
-            target.value = "";
-            target.style.height = "auto";
+            target.value = '';
+            target.style.height = 'auto';
             if (!message) return;
 
             try {
                 sendMessage(message);
             } catch (error) {
-                console.error("Error sending message:", error);
+                console.error('Error sending message:', error);
             }
         }
         // shift + Enter 会触发默认的换行行为

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { selectedChat } from "$lib/store.svelte";
-    import MsgItem from "./MsgItem.svelte";
+    import { selectedChat } from '$lib/store.svelte';
+    import MsgItem from './MsgItem.svelte';
 
     // filter out system messages
     const messages = $derived(
         Array.from(selectedChat.session?.messages || []).filter(
-            (message) => message.role !== "system",
+            (message) => message.role !== 'system',
         ),
     );
 
@@ -13,13 +13,13 @@
     const isWaiting = $derived(() => {
         return (
             messages.length > 0 &&
-            messages[messages.length - 1].role === "assistant" &&
-            messages[messages.length - 1].content === ""
+            messages[messages.length - 1].role === 'assistant' &&
+            messages[messages.length - 1].content === ''
         );
     });
 
     let messagesContainer: HTMLDivElement;
-    let lastMessageContent = "";
+    let lastMessageContent = '';
     let lastMessageCount = 0;
 
     // 监听 messages 变化，滚动到最下面
@@ -27,7 +27,7 @@
         const shouldScroll = () => {
             if (messages.length === 0 || !messagesContainer) {
                 lastMessageCount = 0;
-                lastMessageContent = "";
+                lastMessageContent = '';
                 return false;
             }
 
@@ -41,7 +41,7 @@
 
         if (shouldScroll()) {
             lastMessageCount = messages.length;
-            lastMessageContent = messages[messages.length - 1]?.content ?? "";
+            lastMessageContent = messages[messages.length - 1]?.content ?? '';
 
             requestAnimationFrame(() => {
                 if (messagesContainer) {

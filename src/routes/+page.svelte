@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { deselectChatSession } from "$lib/store.svelte";
+    import { deselectChatSession } from '$lib/store.svelte';
 
     deselectChatSession();
 </script>

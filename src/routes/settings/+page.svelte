@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { deselectChatSession } from "$lib/store.svelte";
-    import Providers from "./Providers.svelte";
-    import Personas from "./Personas.svelte";
+    import { deselectChatSession } from '$lib/store.svelte';
+    import Providers from './Providers.svelte';
+    import Personas from './Personas.svelte';
 
-    import { providers, personas } from "$lib/store.svelte";
+    import { providers, personas } from '$lib/store.svelte';
 
     deselectChatSession();
 
-    let activeTab: string = "Providers";
-    const tabs: string[] = ["Providers", "Personas"];
+    let activeTab: string = 'Providers';
+    const tabs: string[] = ['Providers', 'Personas'];
 
     function changeTab(tab: string) {
         activeTab = tab;
@@ -31,17 +31,17 @@
         {/each}
     </div>
     <div id="tab-content">
-        {#if activeTab === "Providers"}
+        {#if activeTab === 'Providers'}
             <Providers {providers} />
         {/if}
-        {#if activeTab === "Personas"}
+        {#if activeTab === 'Personas'}
             <Personas {personas} />
         {/if}
     </div>
 </div>
 
 <style>
-    @import "$lib/style/animation.css";
+    @import '$lib/style/animation.css';
 
     #settings-layout {
         flex: 1;

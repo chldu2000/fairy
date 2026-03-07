@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { Persona } from "$lib/types";
-    import type { SvelteMap } from "svelte/reactivity";
-    import { savePersona, deletePersona } from "$lib/store.svelte";
+    import type { Persona } from '$lib/types';
+    import type { SvelteMap } from 'svelte/reactivity';
+    import { savePersona, deletePersona } from '$lib/store.svelte';
 
     type Props = {
         personas: SvelteMap<string, Persona>;
@@ -12,16 +12,16 @@
     // 状态管理
     let isFormVisible = $state(false);
     let isEditing = $state(false);
-    let editingName = ""; // 用于编辑时存储原始名称
+    let editingName = ''; // 用于编辑时存储原始名称
     let showDeleteConfirm = $state(false);
-    let personaToDelete = $state("");
+    let personaToDelete = $state('');
 
     // 表单数据
     let formData: Persona = $state({
-        name: "",
-        description: "",
-        systemPrompt: "",
-        icon: "",
+        name: '',
+        description: '',
+        systemPrompt: '',
+        icon: '',
     }) as Persona;
 
     // 验证错误
@@ -32,12 +32,12 @@
     // 打开新增表单
     function openAddForm() {
         isEditing = false;
-        editingName = "";
+        editingName = '';
         formData = {
-            name: "",
-            description: "",
-            systemPrompt: "",
-            icon: "",
+            name: '',
+            description: '',
+            systemPrompt: '',
+            icon: '',
         };
         errors = {};
         isFormVisible = true;
@@ -60,20 +60,20 @@
         const newErrors: Partial<Record<keyof Persona, string>> = {};
 
         if (!formData.name.trim()) {
-            newErrors.name = "名称不能为空";
+            newErrors.name = '名称不能为空';
         } else if (
             (!isEditing || formData.name !== editingName) &&
             personas.has(formData.name)
         ) {
-            newErrors.name = "Persona 名称已存在";
+            newErrors.name = 'Persona 名称已存在';
         }
 
         if (!formData.description.trim()) {
-            newErrors.description = "描述不能为空";
+            newErrors.description = '描述不能为空';
         }
 
         if (!formData.systemPrompt.trim()) {
-            newErrors.systemPrompt = "系统提示词不能为空";
+            newErrors.systemPrompt = '系统提示词不能为空';
         }
 
         errors = newErrors;
@@ -91,8 +91,8 @@
                     await deletePersona(editingName);
                 }
             } catch (error) {
-                console.error("Error saving persona:", error);
-                alert("保存失败，请重试");
+                console.error('Error saving persona:', error);
+                alert('保存失败，请重试');
             }
         }
     }
@@ -111,7 +111,7 @@
     // 取消删除
     function cancelDelete() {
         showDeleteConfirm = false;
-        personaToDelete = "";
+        personaToDelete = '';
     }
 
     // 确认删除
@@ -119,10 +119,10 @@
         try {
             await deletePersona(personaToDelete);
             showDeleteConfirm = false;
-            personaToDelete = "";
+            personaToDelete = '';
         } catch (error) {
-            console.error("Error deleting persona:", error);
-            alert("删除失败，请重试");
+            console.error('Error deleting persona:', error);
+            alert('删除失败，请重试');
         }
     }
 </script>
@@ -175,7 +175,7 @@
         ></div>
         <div class="form-container">
             <div class="form-header">
-                <h2>{isEditing ? "编辑 Persona" : "新增 Persona"}</h2>
+                <h2>{isEditing ? '编辑 Persona' : '新增 Persona'}</h2>
             </div>
             <form
                 class="persona-form"

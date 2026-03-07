@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { Provider } from "$lib/types";
-    import type { SvelteMap } from "svelte/reactivity";
-    import { saveProvider, deleteProvider } from "$lib/store.svelte";
-    import { ProviderType } from "$lib/types";
-    import { providerApiEndpoints } from "$lib/constants";
+    import type { Provider } from '$lib/types';
+    import type { SvelteMap } from 'svelte/reactivity';
+    import { saveProvider, deleteProvider } from '$lib/store.svelte';
+    import { ProviderType } from '$lib/types';
+    import { providerApiEndpoints } from '$lib/constants';
 
     type Props = {
         providers: SvelteMap<string, Provider>;
@@ -14,21 +14,21 @@
     // 状态管理
     let isFormVisible = $state(false);
     let isEditing = $state(false);
-    let editingName = ""; // 用于编辑时存储原始名称
+    let editingName = ''; // 用于编辑时存储原始名称
     let showDeleteConfirm = $state(false);
-    let providerToDelete = $state("");
+    let providerToDelete = $state('');
 
     // 初始化表单数据的函数
     function initFormData(
         apiType: ProviderType = ProviderType.OpenAICompatible,
     ): Provider {
         return {
-            name: "",
+            name: '',
             apiType,
             baseUrl: providerApiEndpoints[apiType].baseUrl,
             endpoint: providerApiEndpoints[apiType].endpoint,
             apiKey: null,
-            model: "",
+            model: '',
         };
     }
 
@@ -58,7 +58,7 @@
     // 打开新增表单
     function openAddForm() {
         isEditing = false;
-        editingName = "";
+        editingName = '';
         formData = initFormData();
         errors = {};
         isFormVisible = true;
@@ -81,30 +81,30 @@
         const newErrors: Partial<Record<keyof Provider, string>> = {};
 
         if (!formData.name.trim()) {
-            newErrors.name = "名称不能为空";
+            newErrors.name = '名称不能为空';
         } else if (
             (!isEditing || formData.name !== editingName) &&
             providers.has(formData.name)
         ) {
-            newErrors.name = "Provider 名称已存在";
+            newErrors.name = 'Provider 名称已存在';
         }
 
         if (!formData.baseUrl.trim()) {
-            newErrors.baseUrl = "Base URL 不能为空";
+            newErrors.baseUrl = 'Base URL 不能为空';
         } else {
             try {
                 new URL(formData.baseUrl);
             } catch {
-                newErrors.baseUrl = "请输入有效的 URL";
+                newErrors.baseUrl = '请输入有效的 URL';
             }
         }
 
         if (!formData.endpoint.trim()) {
-            newErrors.endpoint = "Endpoint 不能为空";
+            newErrors.endpoint = 'Endpoint 不能为空';
         }
 
         if (!formData.model.trim()) {
-            newErrors.model = "Model 不能为空";
+            newErrors.model = 'Model 不能为空';
         }
 
         errors = newErrors;
@@ -122,8 +122,8 @@
                     await deleteProvider(editingName);
                 }
             } catch (error) {
-                console.error("Error saving provider:", error);
-                alert("保存失败，请重试");
+                console.error('Error saving provider:', error);
+                alert('保存失败，请重试');
             }
         }
     }
@@ -142,7 +142,7 @@
     // 取消删除
     function cancelDelete() {
         showDeleteConfirm = false;
-        providerToDelete = "";
+        providerToDelete = '';
     }
 
     // 确认删除
@@ -150,10 +150,10 @@
         try {
             await deleteProvider(providerToDelete);
             showDeleteConfirm = false;
-            providerToDelete = "";
+            providerToDelete = '';
         } catch (error) {
-            console.error("Error deleting provider:", error);
-            alert("删除失败，请重试");
+            console.error('Error deleting provider:', error);
+            alert('删除失败，请重试');
         }
     }
 </script>
@@ -205,7 +205,7 @@
         ></div>
         <div class="form-container">
             <div class="form-header">
-                <h2>{isEditing ? "编辑 Provider" : "新增 Provider"}</h2>
+                <h2>{isEditing ? '编辑 Provider' : '新增 Provider'}</h2>
             </div>
             <form
                 class="provider-form"

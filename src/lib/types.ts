@@ -1,5 +1,5 @@
 export enum ProviderType {
-    OpenAICompatible = "openai-compatible",
+    OpenAICompatible = 'openai-compatible',
 }
 
 export type Provider = {
@@ -31,7 +31,7 @@ export type Settings = {
 };
 
 export type Message = {
-    role: "user" | "assistant" | "system";
+    role: 'user' | 'assistant' | 'system';
     content: string;
     // timestamp: string;
 };

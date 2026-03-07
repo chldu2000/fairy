@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount } from 'svelte';
 
     // import './layout.css';
-    import Sidebar from "./Sidebar.svelte";
-    import { loadPreferences, loadChatHistory } from "$lib/store.svelte";
+    import Sidebar from './Sidebar.svelte';
+    import { loadPreferences, loadChatHistory } from '$lib/store.svelte';
 
     let { children } = $props();
 
     onMount(() => {
-        console.log("Layout mounted");
+        console.log('Layout mounted');
         loadPreferences();
         loadChatHistory();
     });
