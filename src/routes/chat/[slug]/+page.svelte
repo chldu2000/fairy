@@ -5,6 +5,7 @@
     import MsgInput from "./MsgInput.svelte";
     import { chatHistory, selectChatSession } from "$lib/store.svelte";
     import { goto } from "$app/navigation";
+    import { resolve } from "$app/paths";
 
     let previousSlug: string | null = null;
     const slug = $derived(page.params.slug);
@@ -21,7 +22,7 @@
                 console.warn(
                     `Chat session not found: ${sessionId}, redirecting to home.`,
                 );
-                goto("/");
+                goto(resolve("/"));
             }
         }
     });

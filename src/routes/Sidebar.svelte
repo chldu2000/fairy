@@ -1,5 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+    import { resolve } from "$app/paths";
     import { scale } from "svelte/transition";
     import KKButton from "$lib/widgets/KKButton.svelte";
     import {
@@ -22,12 +23,12 @@
         if (target === -1) {
             // window.location.href = resolve('/settings');
             // selectChat(-1);
-            goto("/settings");
+            goto(resolve("/settings"));
         } else if (target >= 0) {
             // selectedChatId.set(target);
             const newChatId = await createChatSession("Unnamed Chat");
             console.log(`Created chat: ${newChatId}`);
-            goto(`/chat/${newChatId}`);
+            goto(resolve(`/chat/${newChatId}`));
         } else {
             console.error("Invalid target for onclick:", target);
         }
@@ -42,7 +43,7 @@
         console.log(`Deleting chat: ${id}`);
         deleteChatSession(id);
         if (isCurrentChat) {
-            goto("/");
+            goto(resolve("/"));
         }
     }
 </script>
@@ -52,7 +53,7 @@
     <div class="chat-list">
         {#each chatEntries as chat (chat.id)}
             <a
-                href={`/chat/${chat.id}`}
+                href={resolve(`/chat/${chat.id}`)}
                 class="chat-item {selectedChat.id === chat.id
                     ? 'selected'
                     : ''}"
