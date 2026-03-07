@@ -16,10 +16,6 @@
 </script>
 
 <div id="settings-layout">
-    <!-- <div>
-        settings window
-    </div> -->
-
     <div class="tabs-bar">
         {#each tabs as tab (tab)}
             <button
