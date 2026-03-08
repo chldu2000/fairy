@@ -8,6 +8,7 @@
         selectedChat,
         createChatSession,
         deleteChatSession,
+        saveChatSession,
     } from '$lib/store.svelte';
 
     const chatEntries = $derived(
@@ -18,6 +19,12 @@
             }))
             .reverse(),
     );
+
+    // 重命名相关状态
+    let isRenameFormVisible = $state(false);
+    let renameChatId = $state(-1);
+    let renameNewName = $state('');
+    let renameError = $state('');
 
     async function jumpTo(target: number) {
         if (target === -1) {
@@ -46,6 +53,45 @@
             goto(resolve('/'));
         }
     }
+
+    function handleRenameChat(event: Event, id: number, currentName: string) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        renameChatId = id;
+        renameNewName = currentName;
+        renameError = '';
+        isRenameFormVisible = true;
+    }
+
+    async function handleRenameSubmit() {
+        if (!renameNewName.trim()) {
+            renameError = '名称不能为空';
+            return;
+        }
+
+        try {
+            const chatSession = chatHistory.get(renameChatId);
+            if (chatSession) {
+                chatSession.name = renameNewName.trim();
+                await saveChatSession(chatSession);
+                isRenameFormVisible = false;
+                renameChatId = -1;
+                renameNewName = '';
+                renameError = '';
+            }
+        } catch (error) {
+            console.error('Error renaming chat session:', error);
+            renameError = '重命名失败，请重试';
+        }
+    }
+
+    function handleRenameCancel() {
+        isRenameFormVisible = false;
+        renameChatId = -1;
+        renameNewName = '';
+        renameError = '';
+    }
 </script>
 
 <div class="sidebar">
@@ -60,16 +106,68 @@
                 transition:scale
             >
                 <span class="chat-name">{chat.name}</span>
-                <KKButton
-                    preset="plain"
-                    class="auto-hide"
-                    onclick={(e) => handleDeleteChat(e, chat.id)}>✕</KKButton
-                >
+                <div class="chat-actions">
+                    <KKButton
+                        preset="plain"
+                        class="auto-hide"
+                        onclick={(e) => handleRenameChat(e, chat.id, chat.name)}>✎</KKButton
+                    >
+                    <KKButton
+                        preset="plain"
+                        class="auto-hide"
+                        onclick={(e) => handleDeleteChat(e, chat.id)}>✕</KKButton
+                    >
+                </div>
             </a>
         {/each}
     </div>
     <KKButton onclick={() => jumpTo(-1)}>Settings</KKButton>
 </div>
+
+<!-- 重命名模态框 -->
+{#if isRenameFormVisible}
+    <div
+        class="form-overlay"
+        onclick={handleRenameCancel}
+        aria-hidden="true"
+    ></div>
+    <div class="form-container">
+        <div class="form-header">
+            <h2>重命名聊天</h2>
+        </div>
+        <form
+            class="rename-form"
+            onsubmit={(e) => {
+                e.preventDefault();
+                handleRenameSubmit();
+            }}
+        >
+            <div class="form-field">
+                <label for="newName">聊天名称 *</label>
+                <input
+                    id="newName"
+                    type="text"
+                    bind:value={renameNewName}
+                    placeholder="输入聊天名称"
+                    autofocus
+                />
+                {#if renameError}
+                    <span class="error">{renameError}</span>
+                {/if}
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="submit-button"> 保存 </button>
+                <button
+                    type="button"
+                    class="cancel-button"
+                    onclick={handleRenameCancel}
+                >
+                    取消
+                </button>
+            </div>
+        </form>
+    </div>
+{/if}
 
 <style>
     @import '$lib/style/animation.css';
@@ -142,5 +240,112 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .chat-actions {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    /* 模态框样式 */
+    .form-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+    }
+
+    .form-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 1.5rem;
+        width: 90%;
+        max-width: 400px;
+        z-index: 101;
+    }
+
+    .form-header h2 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .rename-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .form-field label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-field input {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    .form-field input:focus {
+        outline: none;
+        border-color: #0070f3;
+        box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+    }
+
+    .error {
+        color: #ff4d4f;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .submit-button,
+    .cancel-button {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .submit-button {
+        background-color: #0070f3;
+        color: white;
+        border: none;
+    }
+
+    .submit-button:hover {
+        background-color: #0051cc;
+    }
+
+    .cancel-button {
+        background-color: #f0f0f0;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+
+    .cancel-button:hover {
+        background-color: #e0e0e0;
     }
 </style>

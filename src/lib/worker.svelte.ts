@@ -33,6 +33,8 @@ export async function sendMessage(message: string) {
                 role: 'system',
                 content: systemPrompt,
             });
+            // 使用用户消息的前 20 个字符作为会话名称
+            selectedChat.session.name = message.slice(0, 20);
         }
         // 添加用户消息
         selectedChat.session.messages.push({ role: 'user', content: message });
