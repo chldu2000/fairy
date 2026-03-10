@@ -10,38 +10,28 @@ import {
 } from './store.svelte';
 
 // TODO: rename to OpenAI worker/adapter/client, add other provider workers as needed
-export async function sendMessage_Test(message: string) {
-    if (selectedChat.session) {
-        selectedChat.session.messages.push({ role: 'user', content: message });
-        const response = 'This is a mocked response';
-        selectedChat.session.messages.push({
-            role: 'assistant',
-            content: response,
-        });
-    }
-}
-
 export async function sendMessage(message: string) {
     if (!browser) return;
 
-    if (selectedChat.session) {
-        if (selectedChat.session.messages.length === 0) {
+    const currentSession = selectedChat.session;
+    if (currentSession) {
+        if (currentSession.messages.length === 0) {
             // 如果是新会话，添加系统提示
-            const systemPrompt =
+            const systemPrompt = 
                 personas.get(preferences.persona)?.systemPrompt || '';
-            selectedChat.session.messages.push({
+            currentSession.messages.push({
                 role: 'system',
                 content: systemPrompt,
             });
             // 使用用户消息的前 20 个字符作为会话名称
-            selectedChat.session.name = message.slice(0, 20);
+            currentSession.name = message.slice(0, 20);
         }
         // 添加用户消息
-        selectedChat.session.messages.push({ role: 'user', content: message });
+        currentSession.messages.push({ role: 'user', content: message });
 
         // 添加空的助手消息，用于实时更新
-        const assistantMessageIndex = selectedChat.session.messages.length;
-        selectedChat.session.messages.push({ role: 'assistant', content: '' });
+        const assistantMessageIndex = currentSession.messages.length;
+        currentSession.messages.push({ role: 'assistant', content: '' });
 
         const url = '/api'; // use local API proxy
         const provider = providers.get(preferences.provider);
@@ -53,7 +43,7 @@ export async function sendMessage(message: string) {
         const body = {
             target: `${targetBaseUrl}${targetEndpoint}`,
             model: provider?.model,
-            messages: selectedChat.session.messages,
+            messages: currentSession.messages,
             temperature: 0.7,
             stream: true, // 使用流式传输
         };
@@ -99,7 +89,7 @@ export async function sendMessage(message: string) {
                             const dataStr = trimmed.slice(5).trim();
                             if (dataStr === '[DONE]') {
                                 // 流式传输结束
-                                await saveChatSession(selectedChat.session);
+                                await saveChatSession(currentSession);
                                 return;
                             }
 
@@ -109,7 +99,7 @@ export async function sendMessage(message: string) {
                                     const delta = data.choices[0].delta;
                                     if (delta.content) {
                                         // 实时更新助手消息内容
-                                        selectedChat.session.messages[
+                                        currentSession.messages[
                                             assistantMessageIndex
                                         ].content += delta.content;
                                     }
@@ -122,12 +112,12 @@ export async function sendMessage(message: string) {
                 }
 
                 // 保存完整会话
-                await saveChatSession(selectedChat.session);
+                await saveChatSession(currentSession);
             }
         } catch (error) {
             console.error('Error sending message:', error);
             // 处理错误，可能需要显示错误消息给用户
-            selectedChat.session.messages[assistantMessageIndex].content =
+            currentSession.messages[assistantMessageIndex].content =
                 `Error: ${(error as Error).message}`;
         }
     }
