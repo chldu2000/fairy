@@ -92,6 +92,16 @@
         renameNewName = '';
         renameError = '';
     }
+
+    // 新增：输入框引用
+    let renameInput = $state<HTMLInputElement | null>(null);
+
+    // 新增：当模态框显示时自动聚焦
+    $effect(() => {
+        if (isRenameFormVisible && renameInput) {
+            renameInput.focus();
+        }
+    });
 </script>
 
 <div class="sidebar">
@@ -148,8 +158,8 @@
                     id="newName"
                     type="text"
                     bind:value={renameNewName}
+                    bind:this={renameInput}
                     placeholder="输入聊天名称"
-                    autofocus
                 />
                 {#if renameError}
                     <span class="error">{renameError}</span>
