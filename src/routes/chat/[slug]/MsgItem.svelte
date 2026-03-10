@@ -147,6 +147,9 @@
         padding: 2px 4px;
         border-radius: 3px;
         font-size: 0.9em;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
     }
 
     .message-content :global(pre) {
@@ -155,11 +158,17 @@
         border-radius: 6px;
         overflow-x: auto;
         margin: 8px 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .message-content :global(pre code) {
         background-color: transparent;
         padding: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     /* 响应式设计 */
