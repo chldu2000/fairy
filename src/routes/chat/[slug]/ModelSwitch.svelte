@@ -22,7 +22,7 @@
 
 <div id="model-switch">
     <div id="provider-select">
-        <span>Provider:</span>
+        <span class="select-label">Provider:</span>
         <select
             bind:value={preferences.provider}
             onchange={(e) => handleModelChange(e, 'provider')}
@@ -33,7 +33,7 @@
         </select>
     </div>
     <div id="persona-select">
-        <span>Persona:</span>
+        <span class="select-label">Persona:</span>
         <select
             bind:value={preferences.persona}
             onchange={(e) => handleModelChange(e, 'persona')}
@@ -47,15 +47,44 @@
 
 <style>
     #model-switch {
-        background-color: #f0f0f0;
-        color: black;
+        /*background-color: black;*/
+        color: white;
         display: flex;
         flex: 1;
         flex-direction: row;
+        margin-top: 0.5rem;
+        height: fit-content;
+        /*border: grey 3px solid;*/
+        /*border-radius: 1.25rem;*/
+        align-items: center;
     }
 
     #provider-select,
     #persona-select {
         margin: 0 1rem;
+    }
+
+    select {
+        background-color: black;
+        color: white;
+        border-radius: 1.25rem;
+        border: grey 3px solid;
+        /*width: 16rem;*/
+        max-width: max-content;
+        height: 2.5rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    select:hover {
+        border-color: #9bbe00;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #9bbe00;
+        /*box-shadow: 0 0 0 2px rgba(155, 190, 0, 0.3);*/
     }
 </style>

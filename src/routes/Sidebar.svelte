@@ -2,7 +2,7 @@
     import { goto } from '$app/navigation';
     import { resolve } from '$app/paths';
     import { scale } from 'svelte/transition';
-    import KKButton from '$lib/widgets/KKButton.svelte';
+    import FButton from '$lib/widgets/FButton.svelte';
     import {
         chatHistory,
         selectedChat,
@@ -105,7 +105,7 @@
 </script>
 
 <div class="sidebar">
-    <KKButton onclick={() => jumpTo(0)}>New Chat</KKButton>
+    <FButton onclick={() => jumpTo(0)}>New Chat</FButton>
     <div class="chat-list">
         {#each chatEntries as chat (chat.id)}
             <a
@@ -117,21 +117,21 @@
             >
                 <span class="chat-name">{chat.name}</span>
                 <div class="chat-actions">
-                    <KKButton
+                    <FButton
                         preset="plain"
                         class="auto-hide"
-                        onclick={(e) => handleRenameChat(e, chat.id, chat.name)}>✎</KKButton
+                        onclick={(e) => handleRenameChat(e, chat.id, chat.name)}>✎</FButton
                     >
-                    <KKButton
+                    <FButton
                         preset="plain"
                         class="auto-hide"
-                        onclick={(e) => handleDeleteChat(e, chat.id)}>✕</KKButton
+                        onclick={(e) => handleDeleteChat(e, chat.id)}>✕</FButton
                     >
                 </div>
             </a>
         {/each}
     </div>
-    <KKButton onclick={() => jumpTo(-1)}>Settings</KKButton>
+    <FButton onclick={() => jumpTo(-1)}>Settings</FButton>
 </div>
 
 <!-- 重命名模态框 -->

@@ -1,6 +1,6 @@
 @import url("./animation.css");
 
-.kk-button {
+.f-button {
     background-color: black;
     color: white;
     height: 2.5rem;
@@ -19,21 +19,21 @@
     transition: all 0.2s ease;
 }
 
-.kk-button:hover {
+.f-button:hover {
     animation: breath-scale-border 1.25s infinite alternate;
     color: black;
 }
 
-.kk-button:active {
+.f-button:active {
     color: white;
 }
 
-.kk-button:focus {
+.f-button:focus {
     outline: 2px solid #9bbe00;
     outline-offset: 2px;
 }
 
-.kk-button:disabled {
+.f-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     animation: none;
@@ -42,12 +42,12 @@
     border-color: grey;
 }
 
-.kk-button.round {
+.f-button.round {
 	width: 2.5rem;
 	padding: 0;
 }
 
-.kk-button.plain {
+.f-button.plain {
 	background: transparent;
 	border: none;
 	color: inherit;
@@ -62,7 +62,7 @@
 	margin: 0;
 }
 
-.kk-button.plain:hover {
+.f-button.plain:hover {
     animation: none;
     background-color: rgba(0, 0, 0, 0.2);
 }

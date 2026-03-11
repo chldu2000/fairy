@@ -9,6 +9,7 @@
 
     let previousSlug: string | null = null;
     const slug = $derived(page.params.slug);
+    const chat_name = $derived(chatHistory.get(Number(slug))?.name ?? '');
 
     $effect(() => {
         // prevents effect being triggered when current chat session changes
@@ -33,7 +34,7 @@
         <ModelSwitch />
     </div>
 
-    <div>chat slug : {slug}</div>
+    <div id="chat-name">{chat_name}</div>
     <div id="msg-display-area">
         <MsgDisplay />
     </div>
@@ -54,6 +55,12 @@
     #model-switch-area {
         display: flex;
         flex: 0 0 auto;
+    }
+
+    #chat-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0.4rem 1rem;
     }
 
     #msg-display-area {

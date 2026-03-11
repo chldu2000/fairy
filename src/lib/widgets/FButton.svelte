@@ -17,7 +17,7 @@
     }: Props = $props();
 </script>
 
-<button {...restProps} class="kk-button {className} {shape}">
+<button {...restProps} class="f-button {className} {shape}">
     {@render children?.()}
 </button>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import KKButton from '$lib/widgets/KKButton.svelte';
+    import FButton from '$lib/widgets/FButton.svelte';
     import { sendMessage } from '$lib/worker.svelte';
 
     function handleSubmit(event: Event) {
@@ -56,7 +56,7 @@
             oninput={autoResizeTextarea}
             onkeydown={handleKeyDown}
         ></textarea>
-        <KKButton id="submit-button" type="submit">Submit</KKButton>
+        <FButton id="submit-button" type="submit">Submit</FButton>
     </form>
 </div>
 
