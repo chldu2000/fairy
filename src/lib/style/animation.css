@@ -23,9 +23,11 @@
 @keyframes breath {
     0% {
         background-color: yellow;
+        border-color: yellow;
     }
     100% {
         background-color: #9bbe00;
+        border-color: #9bbe00;
     }
 }
 
