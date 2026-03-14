@@ -40,7 +40,7 @@
         gap: 8px;
         padding: 8px;
         box-sizing: border-box; /* 使宽高包含 padding 和 border */
-        background-color: grey;
+        background-color: #2f2f2f;
     }
 
     #app > * {
@@ -49,7 +49,7 @@
         overflow: hidden;
         display: flex;
 
-        background-color: #2f2f2f;
+        background-color: #0f0f0f;
         color: white;
     }
 

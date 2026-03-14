@@ -33,8 +33,10 @@
     <div id="model-switch-area">
         <ModelSwitch />
     </div>
-
     <div id="chat-name">{chat_name}</div>
+
+    <div id="split-line"></div>
+
     <div id="msg-display-area">
         <MsgDisplay />
     </div>
@@ -63,6 +65,14 @@
         margin: 0.4rem 1rem;
     }
 
+    #split-line {
+        border-top: 2px solid gray;
+        margin: 0 1rem 0.2rem 1rem;
+        box-shadow: 0 0.2rem 0.4rem #0f0f0f;
+        position: relative;
+        z-index: 10;
+    }
+
     #msg-display-area {
         display: flex;
         flex: 1;
@@ -73,5 +83,8 @@
     #msg-input-area {
         display: flex;
         flex: 0 0 auto;
+        box-shadow: 0 -0.2rem 0.4rem #0f0f0f;
+        position: relative;
+        z-index: 10;
     }
 </style>

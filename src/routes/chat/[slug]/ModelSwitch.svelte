@@ -50,7 +50,8 @@
                 aria-haspopup="true"
                 aria-expanded={providerDropdownOpen}
             >
-                {preferences.provider}
+                <span class="button-text">{preferences.provider}</span>
+                <span class="arrow" class:rotated={providerDropdownOpen}>&#9660;</span>
             </button>
             {#if providerDropdownOpen}
                 <ul class="dropdown-list" role="listbox">
@@ -84,7 +85,8 @@
                 aria-haspopup="true"
                 aria-expanded={personaDropdownOpen}
             >
-                {preferences.persona}
+                <span class="button-text">{preferences.persona}</span>
+                <span class="arrow" class:rotated={personaDropdownOpen}>&#9660;</span>
             </button>
             {#if personaDropdownOpen}
                 <ul class="dropdown-list" role="listbox">
@@ -142,9 +144,9 @@
         border-radius: 1.25rem;
         border: grey 3px solid;
         height: 2.5rem;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-        text-align: left;
+        padding-left: 1.25rem;
+        padding-right: 0.75rem;
+        /* text-align: left; */
         cursor: pointer;
         font-family: inherit;
         font-size: inherit;
@@ -152,7 +154,23 @@
         display: inline-flex;
         align-items: center;
         min-width: 10rem;
-        justify-content: center;
+        justify-content: space-between;
+        /* gap: 0.75rem; */
+    }
+
+    .button-text {
+        flex: 1;
+        text-align: left;
+    }
+
+    .arrow {
+        font-size: 0.75em;
+        transition: transform 0.2s ease;
+        /* line-height: 1; */
+    }
+
+    .arrow.rotated {
+        transform: rotate(180deg);
     }
 
     .dropdown-button:hover {
@@ -169,7 +187,7 @@
         position: absolute;
         top: calc(100% + 0.5rem);
         /* left: 0; */
-        background-color: black;
+        background-color: #2f2f2f;
         /* border: grey 3px solid; */
         border-radius: 1.25rem;
         list-style: none;

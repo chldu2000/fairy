@@ -201,7 +201,7 @@
     }
 
     .chat-item {
-        background-color: grey;
+        background-color: #2f2f2f;
         color: white;
 
         /* width: 15rem; */
