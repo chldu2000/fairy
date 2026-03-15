@@ -57,7 +57,7 @@
                 <ul class="dropdown-list" role="listbox">
                     {#each Array.from(providers.keys()) as key (key)}
                         <li
-                            class="dropdown-item"
+                            class="dropdown-item {key === preferences.provider ? 'selected' : ''}"
                             role="option"
                             aria-selected={key === preferences.provider}
                             on:click={() => handleProviderChange(key)}
@@ -92,7 +92,7 @@
                 <ul class="dropdown-list" role="listbox">
                     {#each Array.from(personas.keys()) as key (key)}
                         <li
-                            class="dropdown-item"
+                            class="dropdown-item {key === preferences.persona ? 'selected' : ''}"
                             role="option"
                             aria-selected={key === preferences.persona}
                             on:click={() => handlePersonaChange(key)}
@@ -188,7 +188,7 @@
         top: calc(100% + 0.5rem);
         /* left: 0; */
         background-color: #2f2f2f;
-        /* border: grey 3px solid; */
+        border: #2f2f2f 3px solid;
         border-radius: 1.25rem;
         list-style: none;
         padding: 0;
@@ -204,6 +204,7 @@
         border-radius: 1.25rem;
     }
 
+    .dropdown-item.selected,
     .dropdown-item:hover {
         color: black;
         animation: breath 2s infinite alternate;

@@ -2,6 +2,7 @@
     import type { Persona } from '$lib/types';
     import type { SvelteMap } from 'svelte/reactivity';
     import { savePersona, deletePersona } from '$lib/store.svelte';
+    import FButton from '$lib/widgets/FButton.svelte';
 
     type Props = {
         personas: SvelteMap<string, Persona>;
@@ -130,7 +131,7 @@
 <div class="personas-container">
     <!-- 操作栏 -->
     <div class="action-bar">
-        <button class="add-button" onclick={openAddForm}> 新增 Persona </button>
+        <FButton onclick={openAddForm}>新增 Persona</FButton>
     </div>
 
     <!-- Persona 列表 -->
@@ -149,18 +150,8 @@
                     </div>
                 </div>
                 <div class="persona-actions">
-                    <button
-                        class="edit-button"
-                        onclick={() => openEditForm(name)}
-                    >
-                        编辑
-                    </button>
-                    <button
-                        class="delete-button"
-                        onclick={() => openDeleteConfirm(name)}
-                    >
-                        删除
-                    </button>
+                    <FButton onclick={() => openEditForm(name)}>编辑</FButton>
+                    <FButton onclick={() => openDeleteConfirm(name)}>删除</FButton>
                 </div>
             </div>
         {/each}
@@ -234,14 +225,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="submit-button"> 保存 </button>
-                    <button
-                        type="button"
-                        class="cancel-button"
-                        onclick={handleCancel}
-                    >
-                        取消
-                    </button>
+                    <FButton type="submit">保存</FButton>
+                    <FButton type="button" onclick={handleCancel}>取消</FButton>
                 </div>
             </form>
         </div>
@@ -263,12 +248,8 @@
                 <p class="warning">此操作无法撤销。</p>
             </div>
             <div class="confirm-actions">
-                <button class="confirm-button" onclick={confirmDelete}>
-                    删除
-                </button>
-                <button class="cancel-button" onclick={cancelDelete}>
-                    取消
-                </button>
+                <FButton onclick={confirmDelete}>删除</FButton>
+                <FButton onclick={cancelDelete}>取消</FButton>
             </div>
         </div>
     {/if}
@@ -283,20 +264,6 @@
         margin-bottom: 1rem;
     }
 
-    .add-button {
-        padding: 0.5rem 1rem;
-        background-color: #0070f3;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .add-button:hover {
-        background-color: #0051cc;
-    }
-
     .persona-list {
         display: flex;
         flex-direction: column;
@@ -308,9 +275,15 @@
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        background-color: #f5f5f5;
-        border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        border: grey 3px solid;
+        border-radius: 1.25rem;
+        transition: all 0.2s ease;
+    }
+
+    .persona-item:hover {
+        border-color: #9bbe00;
+        box-shadow: 0 0 0 3px rgba(155, 190, 0, 0.2);
     }
 
     .persona-info {
@@ -318,7 +291,7 @@
     }
 
     .persona-name {
-        color: #333;
+        color: black;
         font-weight: bold;
         margin-bottom: 0.25rem;
         font-size: 1.1rem;
@@ -331,31 +304,12 @@
 
     .persona-details {
         font-size: 0.9rem;
-        color: #666;
+        color: grey;
     }
 
     .persona-actions {
         display: flex;
         gap: 0.5rem;
-    }
-
-    .edit-button,
-    .delete-button {
-        padding: 0.25rem 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        cursor: pointer;
-        background-color: white;
-    }
-
-    .edit-button:hover {
-        background-color: #f0f0f0;
-    }
-
-    .delete-button:hover {
-        background-color: #ff4d4f;
-        color: white;
-        border-color: #ff4d4f;
     }
 
     .form-overlay {
@@ -368,24 +322,30 @@
         z-index: 100;
     }
 
-    .form-container {
+    .form-container,
+    .confirm-dialog {
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: grey 3px solid;
+        border-radius: 1.25rem;
         padding: 1.5rem;
         width: 90%;
         max-width: 500px;
         z-index: 101;
     }
 
-    .form-header h2 {
+    .confirm-dialog {
+        max-width: 400px;
+    }
+
+    .form-header h2,
+    .confirm-header h3 {
         margin-top: 0;
         margin-bottom: 1rem;
-        color: #333;
+        color: black;
     }
 
     .persona-form {
@@ -402,15 +362,19 @@
 
     .form-field label {
         font-weight: bold;
-        color: #555;
+        color: black;
     }
 
     .form-field input,
+    /* .form-field select, */
     .form-field textarea {
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        border: grey 2px solid;
+        border-radius: 1rem;
         font-size: 1rem;
+        font-family: inherit;
+        background-color: white;
+        transition: all 0.2s ease;
     }
 
     .form-field textarea {
@@ -419,10 +383,11 @@
     }
 
     .form-field input:focus,
+    /* .form-field select:focus, */
     .form-field textarea:focus {
         outline: none;
-        border-color: #0070f3;
-        box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+        border-color: #9bbe00;
+        box-shadow: 0 0 0 2px rgba(155, 190, 0, 0.3);
     }
 
     .error {
@@ -431,59 +396,12 @@
         margin-top: 0.25rem;
     }
 
-    .form-actions {
+    .form-actions,
+    .confirm-actions {
         display: flex;
         justify-content: flex-end;
         gap: 0.5rem;
         margin-top: 1rem;
-    }
-
-    .submit-button,
-    .cancel-button {
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .submit-button {
-        background-color: #0070f3;
-        color: white;
-        border: none;
-    }
-
-    .submit-button:hover {
-        background-color: #0051cc;
-    }
-
-    .cancel-button {
-        background-color: #f0f0f0;
-        color: #333;
-        border: 1px solid #ddd;
-    }
-
-    .cancel-button:hover {
-        background-color: #e0e0e0;
-    }
-
-    .confirm-dialog {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        padding: 1.5rem;
-        width: 90%;
-        max-width: 400px;
-        z-index: 101;
-    }
-
-    .confirm-header h3 {
-        margin-top: 0;
-        margin-bottom: 1rem;
-        color: #333;
     }
 
     .confirm-body {
@@ -491,32 +409,12 @@
     }
 
     .confirm-body p {
-        color: #555;
+        color: black;
         margin: 0.5rem 0;
     }
 
     .confirm-body p.warning {
         color: #faad14;
         font-weight: bold;
-    }
-
-    .confirm-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 0.5rem;
-    }
-
-    .confirm-button {
-        padding: 0.5rem 1rem;
-        background-color: #ff4d4f;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .confirm-button:hover {
-        background-color: #d9363e;
     }
 </style>
