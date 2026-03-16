@@ -18,6 +18,7 @@
     let editingName = ''; // 用于编辑时存储原始名称
     let showDeleteConfirm = $state(false);
     let providerToDelete = $state('');
+    let apiTypeDropdownOpen = $state(false);
 
     // 初始化表单数据的函数
     function initFormData(
@@ -157,6 +158,19 @@
             alert('删除失败，请重试');
         }
     }
+
+    // 点击外部关闭下拉菜单
+    function handleClickOutside(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('#apiType-select')) {
+            apiTypeDropdownOpen = false;
+        }
+    }
+
+    // 只在浏览器环境中监听点击事件
+    if (typeof window !== 'undefined') {
+        window.addEventListener('click', handleClickOutside);
+    }
 </script>
 
 <div class="providers-container">
@@ -218,15 +232,47 @@
 
                 <div class="form-field">
                     <label for="apiType">API 类型 *</label>
-                    <select
-                        id="apiType"
-                        bind:value={formData.apiType}
-                        onchange={handleApiTypeChange}
-                    >
-                        {#each Object.values(ProviderType) as apiType (apiType)}
-                            <option value={apiType}>{apiType}</option>
-                        {/each}
-                    </select>
+                    <div id="apiType-select" class="dropdown-container">
+                        <div class="dropdown">
+                            <button
+                                type="button"
+                                class="dropdown-button"
+                                onclick={() => apiTypeDropdownOpen = !apiTypeDropdownOpen}
+                                aria-haspopup="true"
+                                aria-expanded={apiTypeDropdownOpen}
+                            >
+                                <span class="button-text">{formData.apiType}</span>
+                                <span class={"arrow " + (apiTypeDropdownOpen ? 'rotated' : '')}>&#9660;</span>
+                            </button>
+                            {#if apiTypeDropdownOpen}
+                                <ul class="dropdown-list" role="listbox">
+                                    {#each Object.values(ProviderType) as apiType (apiType)}
+                                        <li
+                                            class="dropdown-item {apiType === formData.apiType ? 'selected' : ''}"
+                                            role="option"
+                                            aria-selected={apiType === formData.apiType}
+                                            onclick={() => {
+                                                formData.apiType = apiType;
+                                                apiTypeDropdownOpen = false;
+                                                handleApiTypeChange();
+                                            }}
+                                            onkeydown={(e) => {
+                                                if (e.key === 'Enter' || e.key === ' ') {
+                                                    e.preventDefault();
+                                                    formData.apiType = apiType;
+                                                    apiTypeDropdownOpen = false;
+                                                    handleApiTypeChange();
+                                                }
+                                            }}
+                                            tabIndex="0"
+                                        >
+                                            {apiType}
+                                        </li>
+                                    {/each}
+                                </ul>
+                            {/if}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-field">
@@ -329,7 +375,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        background-color: white;
+        background-color: #2f2f2f;
         border: grey 3px solid;
         border-radius: 1.25rem;
         transition: all 0.2s ease;
@@ -345,7 +391,7 @@
     }
 
     .provider-name {
-        color: black;
+        color: white;
         font-weight: bold;
         margin-bottom: 0.25rem;
         font-size: 1.1rem;
@@ -379,7 +425,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: white;
+        background-color: #1a1a1a;
         border: grey 3px solid;
         border-radius: 1.25rem;
         padding: 1.5rem;
@@ -396,7 +442,7 @@
     .confirm-header h3 {
         margin-top: 0;
         margin-bottom: 1rem;
-        color: black;
+        color: white;
     }
 
     .provider-form {
@@ -413,29 +459,21 @@
 
     .form-field label {
         font-weight: bold;
-        color: black;
+        color: white;
     }
 
-    .form-field input,
-    /* .form-field textarea, */
-    .form-field select {
+    .form-field input {
         padding: 0.5rem 1rem;
         border: grey 2px solid;
         border-radius: 1rem;
         font-size: 1rem;
         font-family: inherit;
-        background-color: white;
+        background-color: #2f2f2f;
+        color: white;
         transition: all 0.2s ease;
     }
 
-    /* .form-field textarea {
-        resize: vertical;
-        min-height: 100px;
-    } */
-
-    .form-field input:focus,
-    /* .form-field textarea:focus, */
-    .form-field select:focus {
+    .form-field input:focus {
         outline: none;
         border-color: #9bbe00;
         box-shadow: 0 0 0 2px rgba(155, 190, 0, 0.3);
@@ -460,12 +498,88 @@
     }
 
     .confirm-body p {
-        color: black;
+        color: white;
         margin: 0.5rem 0;
     }
 
     .confirm-body p.warning {
         color: #faad14;
         font-weight: bold;
+    }
+
+    /* Custom dropdown styles */
+    .dropdown-container {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .dropdown-button {
+        background-color: #2f2f2f;
+        color: white;
+        border-radius: 1rem;
+        border: grey 2px solid;
+        height: 2.5rem;
+        padding-left: 1.25rem;
+        padding-right: 0.75rem;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        display: inline-flex;
+        align-items: center;
+        min-width: 10rem;
+        justify-content: space-between;
+    }
+
+    .button-text {
+        flex: 1;
+        text-align: left;
+    }
+
+    .arrow {
+        font-size: 0.75em;
+        transition: transform 0.2s ease;
+    }
+
+    .arrow.rotated {
+        transform: rotate(180deg);
+    }
+
+    .dropdown-button:hover {
+        color: white;
+        border-color: #9bbe00;
+    }
+
+    .dropdown-button:focus {
+        outline: 2px solid #9bbe00;
+        outline-offset: 2px;
+    }
+
+    .dropdown-list {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        background-color: #2f2f2f;
+        border: grey 2px solid;
+        border-radius: 1rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        min-width: 10rem;
+        z-index: 1000;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        white-space: nowrap;
+        border-radius: 1rem;
+    }
+
+    .dropdown-item.selected,
+    .dropdown-item:hover {
+        color: white;
+        background-color: #444;
     }
 </style>

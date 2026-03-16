@@ -17,6 +17,7 @@
     }: Props = $props();
 </script>
 
+// TODO: 更复杂、贴近ZZZ游戏内按钮的样式，组合图标和文字
 <button {...restProps} class="f-button {className} {shape}">
     {@render children?.()}
 </button>

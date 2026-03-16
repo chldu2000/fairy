@@ -273,9 +273,9 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        background-color: #1a1a1a;
+        border: grey 3px solid;
+        border-radius: 1.25rem;
         padding: 1.5rem;
         width: 90%;
         max-width: 400px;
@@ -285,7 +285,7 @@
     .form-header h2 {
         margin-top: 0;
         margin-bottom: 1rem;
-        color: #333;
+        color: white;
     }
 
     .rename-form {
@@ -302,20 +302,24 @@
 
     .form-field label {
         font-weight: bold;
-        color: #555;
+        color: white;
     }
 
     .form-field input {
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        border: grey 2px solid;
+        border-radius: 1rem;
         font-size: 1rem;
+        font-family: inherit;
+        background-color: #2f2f2f;
+        color: white;
+        transition: all 0.2s ease;
     }
 
     .form-field input:focus {
         outline: none;
-        border-color: #0070f3;
-        box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+        border-color: #9bbe00;
+        box-shadow: 0 0 0 2px rgba(155, 190, 0, 0.3);
     }
 
     .error {
@@ -334,28 +338,30 @@
     .submit-button,
     .cancel-button {
         padding: 0.5rem 1rem;
-        border-radius: 4px;
+        border-radius: 1rem;
         cursor: pointer;
         font-weight: bold;
+        font-family: inherit;
+        font-size: 1rem;
     }
 
     .submit-button {
-        background-color: #0070f3;
-        color: white;
+        background-color: #9bbe00;
+        color: black;
         border: none;
     }
 
     .submit-button:hover {
-        background-color: #0051cc;
+        background-color: #7a9400;
     }
 
     .cancel-button {
-        background-color: #f0f0f0;
-        color: #333;
-        border: 1px solid #ddd;
+        background-color: #444;
+        color: white;
+        border: grey 2px solid;
     }
 
     .cancel-button:hover {
-        background-color: #e0e0e0;
+        background-color: #555;
     }
 </style>

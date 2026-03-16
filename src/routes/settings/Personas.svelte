@@ -188,7 +188,7 @@
                     {/if}
                 </div>
 
-                <div class="form-field">
+                <!-- <div class="form-field">
                     <label for="icon">图标</label>
                     <input
                         id="icon"
@@ -196,7 +196,7 @@
                         bind:value={formData.icon}
                         placeholder="可选，例如: 🤖"
                     />
-                </div>
+                </div> -->
 
                 <div class="form-field">
                     <label for="description">描述 *</label>
@@ -275,7 +275,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        background-color: white;
+        background-color: #2f2f2f;
         border: grey 3px solid;
         border-radius: 1.25rem;
         transition: all 0.2s ease;
@@ -291,7 +291,7 @@
     }
 
     .persona-name {
-        color: black;
+        color: white;
         font-weight: bold;
         margin-bottom: 0.25rem;
         font-size: 1.1rem;
@@ -328,7 +328,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: white;
+        background-color: #1a1a1a;
         border: grey 3px solid;
         border-radius: 1.25rem;
         padding: 1.5rem;
@@ -345,7 +345,7 @@
     .confirm-header h3 {
         margin-top: 0;
         margin-bottom: 1rem;
-        color: black;
+        color: white;
     }
 
     .persona-form {
@@ -362,7 +362,7 @@
 
     .form-field label {
         font-weight: bold;
-        color: black;
+        color: white;
     }
 
     .form-field input,
@@ -373,7 +373,8 @@
         border-radius: 1rem;
         font-size: 1rem;
         font-family: inherit;
-        background-color: white;
+        background-color: #2f2f2f;
+        color: white;
         transition: all 0.2s ease;
     }
 
@@ -409,7 +410,7 @@
     }
 
     .confirm-body p {
-        color: black;
+        color: white;
         margin: 0.5rem 0;
     }
 
