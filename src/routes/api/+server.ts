@@ -47,14 +47,21 @@ export const POST: RequestHandler = async ({ request }) => {
         // 如果是流式响应，直接转发
         if (body.stream) {
             console.log('[Proxy] Streaming response');
+            const responseHeaders: Record<string, string> = {
+                'Content-Type':
+                    response.headers.get('Content-Type') || 'text/event-stream',
+                'Cache-Control': 'no-cache',
+            };
+            // 复制原始响应中的相关 headers
+            const copyHeaders = ['content-type', 'cache-control', 'x-ratelimit-limit', 'x-ratelimit-remaining', 'x-ratelimit-reset'];
+            response.headers.forEach((value, key) => {
+                if (copyHeaders.includes(key.toLowerCase())) {
+                    responseHeaders[key] = value;
+                }
+            });
             return new Response(response.body, {
                 status: response.status,
-                headers: {
-                    'Content-Type':
-                        response.headers.get('Content-Type') || 'text/event-stream',
-                    'Cache-Control': 'no-cache',
-                    Connection: 'keep-alive',
-                },
+                headers: responseHeaders,
             });
         } else {
             // 非流式响应，解析为 JSON
