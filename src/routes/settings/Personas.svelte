@@ -22,7 +22,6 @@
         name: '',
         description: '',
         systemPrompt: '',
-        icon: '',
     }) as Persona;
 
     // 验证错误
@@ -38,7 +37,6 @@
             name: '',
             description: '',
             systemPrompt: '',
-            icon: '',
         };
         errors = {};
         isFormVisible = true;
@@ -140,9 +138,6 @@
             <div class="persona-item">
                 <div class="persona-info">
                     <div class="persona-name">
-                        {#if persona.icon}
-                            <span class="persona-icon">{persona.icon}</span>
-                        {/if}
                         {name}
                     </div>
                     <div class="persona-details">
@@ -187,16 +182,6 @@
                         <span class="error">{errors.name}</span>
                     {/if}
                 </div>
-
-                <!-- <div class="form-field">
-                    <label for="icon">图标</label>
-                    <input
-                        id="icon"
-                        type="text"
-                        bind:value={formData.icon}
-                        placeholder="可选，例如: 🤖"
-                    />
-                </div> -->
 
                 <div class="form-field">
                     <label for="description">描述 *</label>
@@ -295,11 +280,6 @@
         font-weight: bold;
         margin-bottom: 0.25rem;
         font-size: 1.1rem;
-    }
-
-    .persona-icon {
-        margin-right: 0.5rem;
-        font-size: 1.2rem;
     }
 
     .persona-details {
